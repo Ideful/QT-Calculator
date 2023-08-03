@@ -1,145 +1,200 @@
 #include <iostream>
 #include <stack>
 #include <queue>
-// #define std::pair<char, int> lex_w_priority
 
-std::pair<char, double> LongFnToPair(std::string::iterator& iter, size_t& len) {
+// #define digit true 
+// #define operation false
+
+
+struct Lexem {
+    Lexem() = default;
+    bool type;  // 1 is digit, 0 is operator
+    char operation;
+    int16_t priority;
+    double number;
+};
+
+void CalculateQueue(std::queue<Lexem>& que, std::stack<double>& st);
+
+
+Lexem LongFnToLex(std::string::iterator& iter, size_t& len) {
     switch (*iter) {
         case 'm':       // mod
             if ( *(++iter) == 'o' && *(++(++iter)) == 'd') {
                 len = 3.;
-                return std::pair<char,double>{'m',2};
+                return {false, 'm',2,0};
             }
         case 'c':       // cos
             if ( *(++iter) == 'o' && *(++(++iter)) == 'd') {
                 len = 3.;
-                return std::pair<char,double>{'m',2};
+                return {false, 'c',2,0};
             }
         case 's':       // sin s
             if ( *(++iter) == 'i' ) {
                 len = 3.;
-                return std::pair<char,double>{'s',4};
+                return {false, 's',4,0};
             } else {    // sqrt q   
                 len = 4.;
-                return std::pair<char,double>{'q',4};
+                return {false, 'q',4,0};
             }      
         case 't':       // tan t
             len = 3.;
-            return std::pair<char,double>{'q',4};
+            return {false, 'q',4,0};
         case 'a':
-            if (*(++iter) == 'c') {
+            if (*(++iter) == 'c') {     // acos
                 len = 4.; 
-                return std::pair<char,double>{'a',4};   // acos a 
+                return {false, 'a',4,0};
             }    
-            else if (*(++iter) == 's') {
+            else if (*(++iter) == 's') {    // asin
                 len = 4.;
-                return std::pair<char,double>{'i',4};   // asin i  
+                return {false, 'i',4,0};
             }    
-            else if (*(++iter) == 't') {
+            else if (*(++iter) == 't') {    // atan
                 len = 4.;
-                return std::pair<char,double>{'n',4};   // atan n         
+                return {false, 'n',4,0};
             }    
         case 'l':
             if ( *(++iter) == 'n') {                 // ln l
                 len = 2.;
-                return std::pair<char,double>{'l',4};
+                return {false, 'l',4,0};
             } else {                                 // log g
                 len = 3.;    
-                return std::pair<char,double>{'g',4};
+                return {false, 'g',4,0};
             }      
     }
     return {0,0};
 }
 
 
-void FnToPair(std::string::iterator& iter,std::pair<char, double>& duo, size_t& i) {
+void FnToLex(std::string::iterator& iter,Lexem& lex, size_t& i) {   // add unary
     switch (*iter) {
         case '+':
-            duo.first = '+';
-            duo.second = 1;
+            lex.operation = '+';
+            lex.priority = 1;
             i = 1;
             break;
-    std::cout<<duo.first<<'\n';
         case '-':
-            duo.first = '-';
-            duo.second = 1;  
+            lex.operation= '-';
+            lex.priority  = 1;  
             i = 1;   
-
             break;   
         case '*':
-            duo.first = '*';
-            duo.second = 2;
+            lex.operation= '*';
+            lex.priority  = 2;
             i = 1;
             break;   
         case '/':
-            duo.first = '/';
-            duo.second = 2;
+            lex.operation= '/';
+            lex.priority  = 2;
             i = 1;
             break;
         case '^':
-            duo.first = '^';
-            duo.second = 3;
+            lex.operation= '^';
+            lex.priority  = 3;
             i = 1;
             break;
         case '(':
-            duo.first = '(';
-            duo.second = 5;
+            lex.operation= '(';
+            lex.priority  = 5;
             i = 1;
             break;
         case ')':
-            duo.first = ')';
-            duo.second = 5;
+            lex.operation= ')';
+            lex.priority  = 5;
             i = 1;
             break;
         default:
-            duo = LongFnToPair(iter,i);
+            lex = LongFnToLex(iter,i);
+    }
+    lex.type = false;
+    lex.number = 0;
+}
+
+void LexToStack(std::stack<Lexem>& stack, Lexem& lex, std::queue<Lexem>& que) {
+    if (stack.empty()) stack.push(lex);
+    else {
+        if (stack.top().priority > lex.priority) {
+            que.push(stack.top());
+            stack.pop();
+            stack.push(lex);
+        } else {
+            stack.push(lex);
+        }
+    }
+
+}
+
+void PrintQ(std::queue<Lexem>& que) {
+    while (!que.empty()) {
+        std::cout<<que.front().type<<" "<<que.front().operation<<" " << que.front().priority << " " << que.front().number<<std::endl;
+        que.pop();
     }
 }
 
-void PairToStack(std::stack<std::pair<char,double>>& stack, std::pair<char,double>& duo,
-                            std::queue<std::pair<char,double>>& que) {
-    if ( !(stack.empty()) ) {
-        if (duo.second < stack.top().second) {
-            que.push(duo);
+double QueueToNumber(std::queue<Lexem> que) {
+    std::stack<double> st;
+    while (!que.empty()) {
+        if (que.front().type == true) { // digit
+            st.push(que.front().number);
         } else {
-            stack.push(duo);
+            CalculateQueue(que,st);
         }
-    } else que.push(duo);
-
+        que.pop();
+    }
+    return st.top();
 }
 
-
+void CalculateQueue(std::queue<Lexem>& que, std::stack<double>& st) {
+    if (que.front().operation == '+') {
+        double a = st.top();
+        st.pop();
+        double b = st.top();
+        st.pop();
+        st.push(b+a);
+    }
+        else if (que.front().operation == '*') {
+        double a = st.top();
+        st.pop();
+        double b = st.top();
+        st.pop();
+        st.push(b*a);
+    }
+}
 
 int main() {
     // std::cout<<"hi"<<std::endl;
-    std::string str = "2*3+4";
-    std::pair<char,double> duo(0,0);
+    std::string str = "2.7*3.2+4.6";
+    Lexem lex;
     std::string::iterator st_it = str.begin();
-    std::queue<std::pair<char,double>> que;
-    std::stack<std::pair<char,double>> st;
+    std::queue<Lexem> que;
+    std::stack<Lexem> st;
     while(st_it != str.end()) {
         while (*st_it == ' ') {
             str.erase(0,1); // zamenit na fn s counterom probelov
             st_it = str.begin();
         }
-        // std::cout<<str<<"  "<<a<<"\n";
         size_t i = 0;
-        int f(0);
+        // int f(0);
         if (isdigit(*st_it)) {
-            duo.first = 0;
-            duo.second = std::stod(str,&i);
-            que.push(duo);
-            f = 1;
+            lex.number = std::stod(str,&i);
+            lex.type = true;
+            lex.operation = 0;
+            lex.priority = 0;
+            que.push(lex);
+            // f = 1;
         } else {
-            FnToPair(st_it,duo,i);
-            PairToStack(st,duo,que);
+            FnToLex(st_it,lex,i);
+            LexToStack(st,lex,que);
         }
         str = str.erase(0,i);
         st_it = str.begin();
     }
-    while (!que.empty()) {
-        std::cout<<que.front().first<<" "<<que.front().second<<'\n';
-        que.pop();
+    while (!st.empty()) {
+        lex = st.top();
+        que.push(lex);
+        st.pop();
     }
+    // PrintQ(que);
+    std::cout<<QueueToNumber(que);
 
 }
