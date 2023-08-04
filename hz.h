@@ -98,6 +98,67 @@ void Unary_Sub(std::stack<double>& st, double a) {
     st.push(-a);
 }
 
+
+void PrintQ(std::queue<Lexem> que) {
+    while (!que.empty()) {
+        if (que.front().type) {
+            std::cout<<que.front().number<<" ";
+        } else {
+            std::cout<<que.front().operation<<" ";
+        }
+        // std::cout<<que.front().type<<" "<<que.front().operation<<" " << que.front().priority << " " << que.front().number<<std::endl;
+        que.pop();
+    }
+    std::cout<<'\n';
+}
+
+void Prints(std::stack<Lexem> st, Lexem lex) {
+    std::cout<<"curr "<<lex.operation<<" "<<std::endl;
+    while (!st.empty()) {
+        std::cout<<st.top().operation<<" " <<std::endl;
+        st.pop();
+    }
+    // std::cout<<'\n';
+}
+
+void Printqwe(std::stack<Lexem> st) {
+    while (!st.empty()) {
+        std::cout<<st.top().operation<<" " <<std::endl;
+        st.pop();
+    }
+    // std::cout<<'\n';
+}
+
+void PrintQS(std::queue<Lexem> que, std::stack<double> st) {
+    while (!que.empty()) {
+        if (que.front().type) {
+            std::cout<<que.front().number<<" ";
+        } else {
+            std::cout<<que.front().operation<<" ";
+        }
+        // std::cout<<que.front().type<<" "<<que.front().operation<<" " << que.front().priority << " " << que.front().number<<std::endl;
+        que.pop();
+    }
+    std::cout<<"        "<<st.top();
+    std::cout<<'\n';
+}
+
+void Printsa(std::stack<Lexem> st, Lexem lex) {
+    // std::cout<<"curr "<<lex.operation<<" "<<std::endl;
+    while (!st.empty()) {
+        std::cout<<"__"<<st.top().operation<<" " <<std::endl;
+        st.pop();
+    }
+    std::cout<<'\n';
+}
+
+// (2+3)*4
+
+
+
+
+
+
 // ()                       5
 // +                        1
 // -                        1

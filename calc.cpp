@@ -6,12 +6,12 @@
 Lexem LongFnToLexem(std::string::iterator& iter, size_t& len) {
     switch (*iter) {
         case 'm':       // mod
-            if ( *(++iter) == 'o' && *(++(++iter)) == 'd') {
+            if ( *(++iter) == 'o') {
                 len = 3;
                 return {false, 'm',2,0};
             }
         case 'c':       // cos
-            if ( *(++iter) == 'o' && *(++(++iter)) == 'd') {
+            if ( *(++iter) == 'o') {
                 len = 3;
                 return {false, 'c',2,0};
             }
@@ -94,12 +94,12 @@ void FnToLex(std::string::iterator& iter,Lexem& lex, size_t& i) {   // add unary
             break;
         case '(':
             lex.operation= '(';
-            lex.priority  = 5;
+            lex.priority  = 0;
             i = 1;
             break;
         case ')':
             lex.operation= ')';
-            lex.priority  = 5;
+            lex.priority  = 0;
             i = 1;
             break;
         default:
@@ -109,26 +109,33 @@ void FnToLex(std::string::iterator& iter,Lexem& lex, size_t& i) {   // add unary
     lex.number = 0;
 }
 
-void LexToStack(std::stack<Lexem>& stack, Lexem& lex, std::queue<Lexem>& que) {
-    if (stack.empty()) stack.push(lex);
-    else {
-        if (stack.top().priority > lex.priority) {
+bool CheckIfFn(Lexem& lex) {
+    std::string fn = "(cstaioqlg";
+    return (fn.find(lex.operation) == std::string::npos) ? false : true;
+}
+
+
+// ((s2->priority < prev_priority ||         (s2->priority == prev_priority && s2->data[0] != '^'))
+
+void LexProcessor(std::stack<Lexem>& stack, Lexem& lex, std::queue<Lexem>& que) {
+    // Prints(stack,lex);
+    if (CheckIfFn(lex)) stack.push(lex);  // lex is function
+    else if (lex.operation == ')') {  // lex is '('
+        while(stack.top().operation != '(') { 
+                que.push(stack.top());
+                stack.pop();
+        }
+        stack.pop();
+    } else { // lex is operator
+        while(stack.size() > 0 && (lex.priority < stack.top().priority || (lex.priority == stack.top().priority && lex.operation != '^'))) {
             que.push(stack.top());
             stack.pop();
-            stack.push(lex);
-        } else {
-            stack.push(lex);
         }
-    }
-
+        stack.push(lex);
+    } 
 }
 
-void PrintQ(std::queue<Lexem>& que) {
-    while (!que.empty()) {
-        std::cout<<que.front().type<<" "<<que.front().operation<<" " << que.front().priority << " " << que.front().number<<std::endl;
-        que.pop();
-    }
-}
+
 
 double QueueToNumber(std::queue<Lexem>& que) {
     std::stack<double> st;
@@ -144,7 +151,6 @@ double QueueToNumber(std::queue<Lexem>& que) {
 }
 
 void CalculateQueue(std::queue<Lexem>& que, std::stack<double>& st) {
-    // switch (que.front().operation) {}
     if (que.front().operation == '+') BinCalculator(st,Sum);
     else if (que.front().operation == '-') BinCalculator(st,Sub);
     else if (que.front().operation == '*') BinCalculator(st,Mult);
@@ -163,13 +169,16 @@ void CalculateQueue(std::queue<Lexem>& que, std::stack<double>& st) {
     else if (que.front().operation == 'q') UnaryCalculator(st,Sqrt);
     else if (que.front().operation == 'l') UnaryCalculator(st,Ln);
     else if (que.front().operation == 'g') UnaryCalculator(st,Log);
+    PrintQS(que,st);
 }
 
 void UnaryChecker(std::stack<Lexem>& stack, std::string::iterator& it, bool& is_unary) {
+    Printqwe(stack);
     if (is_unary) {
         if (*it == '+') *it = '#';
         else *it = '~';
-    } else {
+    } 
+    else {
         if (!stack.empty()) {
             if (stack.top().operation == '(') {
                 if (*it == '+') *it = '#';
@@ -178,44 +187,52 @@ void UnaryChecker(std::stack<Lexem>& stack, std::string::iterator& it, bool& is_
         }
 
     }
-    is_unary = false;
 }
+
+void SkipSpace(std::string& str, std::string::iterator& str_it) {
+    while(*str_it == ' ') str.erase(0,1);
+    str_it = str.begin();
+}
+
+// bool errorchecker (std::string str) {
+// }
 
 int main() {
     // std::cout<<"hi"<<std::endl;
-    std::string str = "+2+3/4";
+    std::string str = "2^3^2";
+    // std::string str = "(10^2)";
+    // bool errorchecker
     Lexem lex;
-    std::string::iterator st_it = str.begin();
+    std::string::iterator str_it = str.begin();
     std::queue<Lexem> que;
     std::stack<Lexem> st;
     bool unary_sign(true);
-    while(st_it != str.end()) {
+    while(str_it != str.end()) {
         // std::cout<<str<<"\n";
-        while (*st_it == ' ') {
-            str.erase(0,1); // zamenit na fn s counterom probelov
-        }
-        st_it = str.begin();
+        SkipSpace(str,str_it);
         size_t i = 0;
-        if (isdigit(*st_it)) {
+        if (isdigit(*str_it)) {
             lex.number = std::stod(str,&i);
             lex.type = true;
             lex.operation = 0;
             lex.priority = 0;
             que.push(lex);
         } else {
-            if (*st_it == '+' || *st_it == '-') UnaryChecker(st,st_it,unary_sign);
-            FnToLex(st_it,lex,i);
-            LexToStack(st,lex,que);
+            if (*str_it == '+' || *str_it == '-') UnaryChecker(st,str_it,unary_sign);
+            FnToLex(str_it,lex,i);
+            LexProcessor(st,lex,que);
         }
         str = str.erase(0,i);
-        st_it = str.begin();
+        str_it = str.begin();
+        if (unary_sign) unary_sign = false;
     }
     while (!st.empty()) {
         lex = st.top();
         que.push(lex);
         st.pop();
     }
+    // std::cout<<"qqqqqqqq\n";
     PrintQ(que);
     std::cout<<QueueToNumber(que);
-
+    // std::cout<<"\n\n\n"<<sin(cos(pow(10, 2)))*43.1+sqrt(625)*(sin(4)+43.143*log10(100)-asin(0.4243))/log(sin(14.03))*sqrt(0.1)/pow(0.009, -3);
 }
