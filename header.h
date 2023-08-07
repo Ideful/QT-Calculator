@@ -2,12 +2,14 @@
 #include <stack>
 #include <queue>
 #include <cmath>
+#include <regex>
+
 struct Lexem {
     Lexem() = default;
     bool type;  // 1 is digit, 0 is operator
     char operation;
     int16_t priority;
-    double number;
+    long double number;
 };
 
 void CalculateQueue(std::queue<Lexem>& que, std::stack<double>& st);
@@ -151,9 +153,6 @@ void Printsa(std::stack<Lexem> st, Lexem lex) {
     }
     std::cout<<'\n';
 }
-
-// (2+3)*4
-
 
 
 

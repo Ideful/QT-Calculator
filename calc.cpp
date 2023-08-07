@@ -1,5 +1,5 @@
 #include "header.h"
-
+#include "errorchecker.h"
 // #define digit true 
 // #define operation false
 
@@ -190,29 +190,26 @@ void UnaryChecker(std::stack<Lexem>& stack, std::string::iterator& it, bool& is_
 }
 
 void SkipSpace(std::string& str, std::string::iterator& str_it) {
-    while(*str_it == ' ') str.erase(0,1);
+    while(*str_it == ' ') str = str.erase(0,1);
     str_it = str.begin();
 }
 
-// bool errorchecker (std::string str) {
-// }
+
 
 int main() {
-    // std::cout<<"hi"<<std::endl;
-    std::string str = "2^3^2";
-    // std::string str = "(10^2)";
-    // bool errorchecker
+    // std::string str = "1e-2";
+    std::string str = "sin(cos(10^2))*43.1+sqrt(625)*(sin(4)+43.143*log(100)-asin(0.4243))/ln(sin(14.03))*sqrt(0.1)/0.009^(-3)";
+    // if (!Errorchecker(str)) 
     Lexem lex;
     std::string::iterator str_it = str.begin();
     std::queue<Lexem> que;
     std::stack<Lexem> st;
     bool unary_sign(true);
     while(str_it != str.end()) {
-        // std::cout<<str<<"\n";
         SkipSpace(str,str_it);
         size_t i = 0;
         if (isdigit(*str_it)) {
-            lex.number = std::stod(str,&i);
+            lex.number = std::stold(str,&i);
             lex.type = true;
             lex.operation = 0;
             lex.priority = 0;
@@ -232,7 +229,7 @@ int main() {
         st.pop();
     }
     // std::cout<<"qqqqqqqq\n";
-    PrintQ(que);
+    // PrintQ(que);
     std::cout<<QueueToNumber(que);
-    // std::cout<<"\n\n\n"<<sin(cos(pow(10, 2)))*43.1+sqrt(625)*(sin(4)+43.143*log10(100)-asin(0.4243))/log(sin(14.03))*sqrt(0.1)/pow(0.009, -3);
+    std::cout<<"\n\n\n"<<sin(cos(pow(10, 2)))*43.1+sqrt(625)*(sin(4)+43.143*log10(100)-asin(0.4243))/log(sin(14.03))*sqrt(0.1)/pow(0.009, -3);
 }
