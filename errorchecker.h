@@ -33,9 +33,9 @@ bool OperatorChecker(std::string& str, uint16_t& len) {
     }
     return true;
 }
-//  2,3
 
-bool BeginChecker(std::string& str, uint16_t& len) {
+
+bool BeginChecker(std::string& str) {
     std::string begin_comparer = " (0123456789cstalx+-";
     if (begin_comparer.find(str[0]) == std::string::npos) return false;
     return true;
@@ -120,12 +120,29 @@ bool FnChecker(std::string& str, uint16_t& len) {
 
 bool Errorchecker (std::string& str) {
     uint16_t len = str.length();
+    if (len > 255) return false;
     if (!StringValidator(str)) return false;
-    if (!BeginChecker(str,len)) return false;
+    if (!BeginChecker(str)) return false;
     if (!EndChecker(str,len)) return false;
     if (!TwoAndMorePointsChecker(str,len)) return false;
     if (!OperatorChecker(str,len)) return false;
     if (!FnChecker(str,len)) return false;
     if (!BracketParser(str,len)) return false;
     return true;
+}
+
+bool XIsDouble(std::string& str) {
+    uint16_t len = str.length();
+    uint8_t dotcounter = 0;
+    if (!isdigit(str[0]) && str[0] != '+' && str[0] != '-') return false;
+    for(uint16_t i = 1; i < len; i++) {
+        if (str[i] == '.') dotcounter++;
+        if (!isdigit(str[i]) && str[i] != '.') return false; 
+    }
+    if (dotcounter > 1) return false;
+    return true;
+}
+
+void StrWithX(std::string& str) {
+    
 }
