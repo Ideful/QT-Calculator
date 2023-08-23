@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QWidget>
+#include <QKeyEvent>
 //#include "../../header.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,6 +21,9 @@ public:
 private slots:
     void on_calculate_clicked();
     void entersign();
+    void on_clear_all_clicked();
+    void on_clear_sign_clicked();
+    void keyPressEvent(QKeyEvent* event) override;
 private:
     Ui::MainWindow *ui;
 };

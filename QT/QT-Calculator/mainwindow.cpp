@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->logn,SIGNAL(clicked()),this,SLOT(entersign()));
     connect(ui->op_br,SIGNAL(clicked()),this,SLOT(entersign()));
     connect(ui->cl_br,SIGNAL(clicked()),this,SLOT(entersign()));
-//    connect(ui->x,SIGNAL(clicked()),this,SLOT(entersign()));
+    connect(ui->xbut,SIGNAL(clicked()),this,SLOT(entersign()));
 }
 
 MainWindow::~MainWindow()
@@ -46,17 +46,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_calculate_clicked()
 {
-//    QByteArray expression = ui->CalcString->text().toUtf8();
     std::string str = ui->CalcString->text().toUtf8().data();
     if (Errorchecker(str) == false) QMessageBox::warning(this,"error","wrong input");
     else {
-        if (ui->x_val->text() == "") {
+        if (!StrContainsX(str)) {
             QString res = QString::number(Calculator(str));
             ui->CalcString->setText(res);
         } else {
-            std::string xval = ui->CalcString->text().toUtf8().data();
-            if (XIsDouble(xval) == false) QMessageBox::warning(this,"error","wrong X input");
+            std::string xval = ui->x_val->text().toUtf8().data();
+            if (ui->x_val->text() == "" || XIsDouble(xval) == false) QMessageBox::warning(this,"error","wrong X input");
             else {
+                InsertXVal(str,xval);
                 QString res = QString::number(Calculator(str));
                 ui->CalcString->setText(res);
             }
@@ -70,4 +70,22 @@ void MainWindow::entersign(){
     if (sender() == ui->tan || sender() == ui->sin || sender() == ui->cos || sender() == ui->atan || sender() == ui->asin || sender() == ui->acos || sender() == ui->logn  || sender() == ui->log10  || sender() == ui->sqrt) syms = syms + "(";
     ui->CalcString->setText(syms);
 
+}
+
+void MainWindow::on_clear_all_clicked()
+{
+    ui->CalcString->setText("");
+}
+
+
+void MainWindow::on_clear_sign_clicked()
+{
+    QString shorty = ui->CalcString->text();
+    shorty.chop(1);
+    ui->CalcString->setText(shorty);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event) {
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) on_calculate_clicked();
+    else QMainWindow::keyPressEvent(event);
 }

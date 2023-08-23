@@ -1,7 +1,7 @@
 #include <string>
 
 bool StringValidator(std::string& str) {
-    const std::string comparer = ".,0123456789+-*/^()sincotalgmdqrx";
+    const std::string comparer = ".,0123456789+-*/^()sincotalgmdqrxe";
     for(const char& sym : str) {
         if (comparer.find(sym) == std::string::npos) return false;
     }
@@ -42,7 +42,7 @@ bool BeginChecker(std::string& str) {
 }
 
 bool EndChecker(std::string& str, uint16_t& len) {
-    std::string end_comparer = " 0123456789)";
+    std::string end_comparer = " 0123456789)x";
     if (end_comparer.find(str[len-1]) == std::string::npos) return false;
     return true;
 }
@@ -143,6 +143,16 @@ bool XIsDouble(std::string& str) {
     return true;
 }
 
-void StrWithX(std::string& str) {
-    
+void InsertXVal(std::string& str,std::string& xval) {
+    const uint16_t x = str.find('x');
+    const uint16_t len = str.length();
+    const std::string after_x = str.substr(x+1,len - 1);
+
+    str = str.substr(0,x);
+    str += xval;
+    str += after_x;
+}
+
+bool StrContainsX(std::string& str) {
+    return (str.find('x') == std::string::npos) ? false : true;
 }

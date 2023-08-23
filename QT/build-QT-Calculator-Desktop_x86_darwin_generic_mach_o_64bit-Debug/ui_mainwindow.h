@@ -18,6 +18,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -54,11 +55,22 @@ public:
     QPushButton *dot;
     QPushButton *calculate;
     QPushButton *pow;
-    QPushButton *cl_br_2;
-    QPushButton *cl_br_3;
+    QPushButton *clear_all;
+    QPushButton *clear_sign;
     QLabel *label;
     QLineEdit *x_val;
     QPushButton *mod;
+    QPushButton *xbut;
+    QLabel *xmin;
+    QLabel *xmax;
+    QLabel *ymin;
+    QLabel *ymax;
+    QLineEdit *xminval;
+    QLineEdit *xmaxval;
+    QLineEdit *yminval;
+    QLineEdit *ymaxval;
+    QLabel *makegraph;
+    QCustomPlot *graphwidget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -66,7 +78,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 600);
+        MainWindow->resize(1252, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         zero = new QPushButton(centralwidget);
@@ -244,28 +256,28 @@ public:
         pow->setStyleSheet(QString::fromUtf8("background-color: rgb(178,216,206); \n"
 "border: 1px solid black;\n"
 "border-radius: 8px;"));
-        cl_br_2 = new QPushButton(centralwidget);
-        cl_br_2->setObjectName(QString::fromUtf8("cl_br_2"));
-        cl_br_2->setGeometry(QRect(300, 280, 31, 31));
-        cl_br_2->setStyleSheet(QString::fromUtf8("background-color: rgb(178,216,206); \n"
+        clear_all = new QPushButton(centralwidget);
+        clear_all->setObjectName(QString::fromUtf8("clear_all"));
+        clear_all->setGeometry(QRect(300, 280, 31, 31));
+        clear_all->setStyleSheet(QString::fromUtf8("background-color: rgb(178,216,206); \n"
 "border: 1px solid black;\n"
 "border-radius: 8px;"));
-        cl_br_3 = new QPushButton(centralwidget);
-        cl_br_3->setObjectName(QString::fromUtf8("cl_br_3"));
-        cl_br_3->setGeometry(QRect(360, 280, 31, 31));
-        cl_br_3->setStyleSheet(QString::fromUtf8("background-color: rgb(178,216,206); \n"
+        clear_sign = new QPushButton(centralwidget);
+        clear_sign->setObjectName(QString::fromUtf8("clear_sign"));
+        clear_sign->setGeometry(QRect(360, 280, 31, 31));
+        clear_sign->setStyleSheet(QString::fromUtf8("background-color: rgb(178,216,206); \n"
 "border: 1px solid black;\n"
 "border-radius: 8px;"));
         label = new QLabel(centralwidget);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(415, 280, 41, 31));
+        label->setGeometry(QRect(470, 320, 41, 31));
         label->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
 "border: 1px solid black;\n"
 "border-radius: 8px;"));
         label->setAlignment(Qt::AlignCenter);
         x_val = new QLineEdit(centralwidget);
         x_val->setObjectName(QString::fromUtf8("x_val"));
-        x_val->setGeometry(QRect(415, 310, 41, 31));
+        x_val->setGeometry(QRect(470, 350, 41, 31));
         x_val->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
 "border: 1px solid black;\n"
 "border-radius: 8px;"));
@@ -275,10 +287,78 @@ public:
         mod->setStyleSheet(QString::fromUtf8("background-color: rgb(178,216,206); \n"
 "border: 1px solid black;\n"
 "border-radius: 8px;"));
+        xbut = new QPushButton(centralwidget);
+        xbut->setObjectName(QString::fromUtf8("xbut"));
+        xbut->setGeometry(QRect(400, 280, 31, 31));
+        xbut->setStyleSheet(QString::fromUtf8("background-color: rgb(178,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        xmin = new QLabel(centralwidget);
+        xmin->setObjectName(QString::fromUtf8("xmin"));
+        xmin->setGeometry(QRect(250, 410, 41, 31));
+        xmin->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        xmin->setAlignment(Qt::AlignCenter);
+        xmax = new QLabel(centralwidget);
+        xmax->setObjectName(QString::fromUtf8("xmax"));
+        xmax->setGeometry(QRect(300, 410, 41, 31));
+        xmax->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        xmax->setAlignment(Qt::AlignCenter);
+        ymin = new QLabel(centralwidget);
+        ymin->setObjectName(QString::fromUtf8("ymin"));
+        ymin->setGeometry(QRect(360, 410, 41, 31));
+        ymin->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        ymin->setAlignment(Qt::AlignCenter);
+        ymax = new QLabel(centralwidget);
+        ymax->setObjectName(QString::fromUtf8("ymax"));
+        ymax->setGeometry(QRect(410, 410, 41, 31));
+        ymax->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        ymax->setAlignment(Qt::AlignCenter);
+        xminval = new QLineEdit(centralwidget);
+        xminval->setObjectName(QString::fromUtf8("xminval"));
+        xminval->setGeometry(QRect(250, 450, 41, 31));
+        xminval->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        xmaxval = new QLineEdit(centralwidget);
+        xmaxval->setObjectName(QString::fromUtf8("xmaxval"));
+        xmaxval->setGeometry(QRect(300, 450, 41, 31));
+        xmaxval->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        yminval = new QLineEdit(centralwidget);
+        yminval->setObjectName(QString::fromUtf8("yminval"));
+        yminval->setGeometry(QRect(360, 450, 41, 31));
+        yminval->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        ymaxval = new QLineEdit(centralwidget);
+        ymaxval->setObjectName(QString::fromUtf8("ymaxval"));
+        ymaxval->setGeometry(QRect(410, 450, 41, 31));
+        ymaxval->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        makegraph = new QLabel(centralwidget);
+        makegraph->setObjectName(QString::fromUtf8("makegraph"));
+        makegraph->setGeometry(QRect(470, 410, 41, 31));
+        makegraph->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
+"border: 1px solid black;\n"
+"border-radius: 8px;"));
+        makegraph->setAlignment(Qt::AlignCenter);
+        graphwidget = new QCustomPlot(centralwidget);
+        graphwidget->setObjectName(QString::fromUtf8("graphwidget"));
+        graphwidget->setGeometry(QRect(719, 180, 331, 211));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 24));
+        menubar->setGeometry(QRect(0, 0, 1252, 24));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -320,11 +400,17 @@ public:
         dot->setText(QCoreApplication::translate("MainWindow", ".", nullptr));
         calculate->setText(QCoreApplication::translate("MainWindow", "=", nullptr));
         pow->setText(QCoreApplication::translate("MainWindow", "^", nullptr));
-        cl_br_2->setText(QCoreApplication::translate("MainWindow", "AC", nullptr));
-        cl_br_3->setText(QCoreApplication::translate("MainWindow", "C", nullptr));
+        clear_all->setText(QCoreApplication::translate("MainWindow", "AC", nullptr));
+        clear_sign->setText(QCoreApplication::translate("MainWindow", "C", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "x\n"
 " value", nullptr));
         mod->setText(QCoreApplication::translate("MainWindow", "mod", nullptr));
+        xbut->setText(QCoreApplication::translate("MainWindow", "x", nullptr));
+        xmin->setText(QCoreApplication::translate("MainWindow", "xmin", nullptr));
+        xmax->setText(QCoreApplication::translate("MainWindow", "xmax", nullptr));
+        ymin->setText(QCoreApplication::translate("MainWindow", "ymin", nullptr));
+        ymax->setText(QCoreApplication::translate("MainWindow", "ymax", nullptr));
+        makegraph->setText(QCoreApplication::translate("MainWindow", "graph", nullptr));
     } // retranslateUi
 
 };

@@ -4,6 +4,8 @@
 
 
 int main() {
-    std::string str = "x+2";
-    std::cout<<Calculator(str);
+    std::string str = "2+x";
+    std::string xval = "0.21";
+    InsertXVal(str,xval);
+    std::cout<<Calculator("12e-3");
 }

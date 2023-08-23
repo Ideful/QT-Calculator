@@ -15234,114 +15234,114 @@ void QCustomPlot::rescaleAxes(bool onlyVisiblePlottables)
 
   \see savePng, saveBmp, saveJpg, saveRastered
 */
-bool QCustomPlot::savePdf(const QString &fileName, int width, int height, QCP::ExportPen exportPen, const QString &pdfCreator, const QString &pdfTitle)
-{
-  bool success = false;
-#ifdef QT_NO_PRINTER
-  Q_UNUSED(fileName)
-  Q_UNUSED(exportPen)
-  Q_UNUSED(width)
-  Q_UNUSED(height)
-  Q_UNUSED(pdfCreator)
-  Q_UNUSED(pdfTitle)
-  qDebug() << Q_FUNC_INFO << "Qt was built without printer support (QT_NO_PRINTER). PDF not created.";
-#else
-  int newWidth, newHeight;
-  if (width == 0 || height == 0)
-  {
-    newWidth = this->width();
-    newHeight = this->height();
-  } else
-  {
-    newWidth = width;
-    newHeight = height;
-  }
+//bool QCustomPlot::savePdf(const QString &fileName, int width, int height, QCP::ExportPen exportPen, const QString &pdfCreator, const QString &pdfTitle)
+//{
+//  bool success = false;
+//#ifdef QT_NO_PRINTER
+//  Q_UNUSED(fileName)
+//  Q_UNUSED(exportPen)
+//  Q_UNUSED(width)
+//  Q_UNUSED(height)
+//  Q_UNUSED(pdfCreator)
+//  Q_UNUSED(pdfTitle)
+//  qDebug() << Q_FUNC_INFO << "Qt was built without printer support (QT_NO_PRINTER). PDF not created.";
+//#else
+//  int newWidth, newHeight;
+//  if (width == 0 || height == 0)
+//  {
+//    newWidth = this->width();
+//    newHeight = this->height();
+//  } else
+//  {
+//    newWidth = width;
+//    newHeight = height;
+//  }
   
-  QPrinter printer(QPrinter::ScreenResolution);
-  printer.setOutputFileName(fileName);
-  printer.setOutputFormat(QPrinter::PdfFormat);
-  printer.setColorMode(QPrinter::Color);
-  printer.printEngine()->setProperty(QPrintEngine::PPK_Creator, pdfCreator);
-  printer.printEngine()->setProperty(QPrintEngine::PPK_DocumentName, pdfTitle);
-  QRect oldViewport = viewport();
-  setViewport(QRect(0, 0, newWidth, newHeight));
-#if QT_VERSION < QT_VERSION_CHECK(5, 3, 0)
-  printer.setFullPage(true);
-  printer.setPaperSize(viewport().size(), QPrinter::DevicePixel);
-#else
-  QPageLayout pageLayout;
-  pageLayout.setMode(QPageLayout::FullPageMode);
-  pageLayout.setOrientation(QPageLayout::Portrait);
-  pageLayout.setMargins(QMarginsF(0, 0, 0, 0));
-  pageLayout.setPageSize(QPageSize(viewport().size(), QPageSize::Point, QString(), QPageSize::ExactMatch));
-  printer.setPageLayout(pageLayout);
-#endif
-  QCPPainter printpainter;
-  if (printpainter.begin(&printer))
-  {
-    printpainter.setMode(QCPPainter::pmVectorized);
-    printpainter.setMode(QCPPainter::pmNoCaching);
-    printpainter.setMode(QCPPainter::pmNonCosmetic, exportPen==QCP::epNoCosmetic);
-    printpainter.setWindow(mViewport);
-    if (mBackgroundBrush.style() != Qt::NoBrush &&
-        mBackgroundBrush.color() != Qt::white &&
-        mBackgroundBrush.color() != Qt::transparent &&
-        mBackgroundBrush.color().alpha() > 0) // draw pdf background color if not white/transparent
-      printpainter.fillRect(viewport(), mBackgroundBrush);
-    draw(&printpainter);
-    printpainter.end();
-    success = true;
-  }
-  setViewport(oldViewport);
-#endif // QT_NO_PRINTER
-  return success;
-}
+//  QPrinter printer(QPrinter::ScreenResolution);
+//  printer.setOutputFileName(fileName);
+//  printer.setOutputFormat(QPrinter::PdfFormat);
+//  printer.setColorMode(QPrinter::Color);
+//  printer.printEngine()->setProperty(QPrintEngine::PPK_Creator, pdfCreator);
+//  printer.printEngine()->setProperty(QPrintEngine::PPK_DocumentName, pdfTitle);
+//  QRect oldViewport = viewport();
+//  setViewport(QRect(0, 0, newWidth, newHeight));
+//#if QT_VERSION < QT_VERSION_CHECK(5, 3, 0)
+//  printer.setFullPage(true);
+//  printer.setPaperSize(viewport().size(), QPrinter::DevicePixel);
+//#else
+//  QPageLayout pageLayout;
+//  pageLayout.setMode(QPageLayout::FullPageMode);
+//  pageLayout.setOrientation(QPageLayout::Portrait);
+//  pageLayout.setMargins(QMarginsF(0, 0, 0, 0));
+//  pageLayout.setPageSize(QPageSize(viewport().size(), QPageSize::Point, QString(), QPageSize::ExactMatch));
+//  printer.setPageLayout(pageLayout);
+//#endif
+//  QCPPainter printpainter;
+//  if (printpainter.begin(&printer))
+//  {
+//    printpainter.setMode(QCPPainter::pmVectorized);
+//    printpainter.setMode(QCPPainter::pmNoCaching);
+//    printpainter.setMode(QCPPainter::pmNonCosmetic, exportPen==QCP::epNoCosmetic);
+//    printpainter.setWindow(mViewport);
+//    if (mBackgroundBrush.style() != Qt::NoBrush &&
+//        mBackgroundBrush.color() != Qt::white &&
+//        mBackgroundBrush.color() != Qt::transparent &&
+//        mBackgroundBrush.color().alpha() > 0) // draw pdf background color if not white/transparent
+//      printpainter.fillRect(viewport(), mBackgroundBrush);
+//    draw(&printpainter);
+//    printpainter.end();
+//    success = true;
+//  }
+//  setViewport(oldViewport);
+//#endif // QT_NO_PRINTER
+//  return success;
+//}
 
-/*!
-  Saves a PNG image file to \a fileName on disc. The output plot will have the dimensions \a width
-  and \a height in pixels, multiplied by \a scale. If either \a width or \a height is zero, the
-  current width and height of the QCustomPlot widget is used instead. Line widths and texts etc.
-  are not scaled up when larger widths/heights are used. If you want that effect, use the \a scale
-  parameter.
+///*!
+//  Saves a PNG image file to \a fileName on disc. The output plot will have the dimensions \a width
+//  and \a height in pixels, multiplied by \a scale. If either \a width or \a height is zero, the
+//  current width and height of the QCustomPlot widget is used instead. Line widths and texts etc.
+//  are not scaled up when larger widths/heights are used. If you want that effect, use the \a scale
+//  parameter.
 
-  For example, if you set both \a width and \a height to 100 and \a scale to 2, you will end up with an
-  image file of size 200*200 in which all graphical elements are scaled up by factor 2 (line widths,
-  texts, etc.). This scaling is not done by stretching a 100*100 image, the result will have full
-  200*200 pixel resolution.
+//  For example, if you set both \a width and \a height to 100 and \a scale to 2, you will end up with an
+//  image file of size 200*200 in which all graphical elements are scaled up by factor 2 (line widths,
+//  texts, etc.). This scaling is not done by stretching a 100*100 image, the result will have full
+//  200*200 pixel resolution.
 
-  If you use a high scaling factor, it is recommended to enable antialiasing for all elements by
-  temporarily setting \ref QCustomPlot::setAntialiasedElements to \ref QCP::aeAll as this allows
-  QCustomPlot to place objects with sub-pixel accuracy.
+//  If you use a high scaling factor, it is recommended to enable antialiasing for all elements by
+//  temporarily setting \ref QCustomPlot::setAntialiasedElements to \ref QCP::aeAll as this allows
+//  QCustomPlot to place objects with sub-pixel accuracy.
 
-  image compression can be controlled with the \a quality parameter which must be between 0 and 100
-  or -1 to use the default setting.
+//  image compression can be controlled with the \a quality parameter which must be between 0 and 100
+//  or -1 to use the default setting.
 
-  The \a resolution will be written to the image file header and has no direct consequence for the
-  quality or the pixel size. However, if opening the image with a tool which respects the metadata,
-  it will be able to scale the image to match either a given size in real units of length (inch,
-  centimeters, etc.), or the target display DPI. You can specify in which units \a resolution is
-  given, by setting \a resolutionUnit. The \a resolution is converted to the format's expected
-  resolution unit internally.
+//  The \a resolution will be written to the image file header and has no direct consequence for the
+//  quality or the pixel size. However, if opening the image with a tool which respects the metadata,
+//  it will be able to scale the image to match either a given size in real units of length (inch,
+//  centimeters, etc.), or the target display DPI. You can specify in which units \a resolution is
+//  given, by setting \a resolutionUnit. The \a resolution is converted to the format's expected
+//  resolution unit internally.
 
-  Returns true on success. If this function fails, most likely the PNG format isn't supported by
-  the system, see Qt docs about QImageWriter::supportedImageFormats().
+//  Returns true on success. If this function fails, most likely the PNG format isn't supported by
+//  the system, see Qt docs about QImageWriter::supportedImageFormats().
 
-  The objects of the plot will appear in the current selection state. If you don't want any selected
-  objects to be painted in their selected look, deselect everything with \ref deselectAll before calling
-  this function.
+//  The objects of the plot will appear in the current selection state. If you don't want any selected
+//  objects to be painted in their selected look, deselect everything with \ref deselectAll before calling
+//  this function.
 
-  If you want the PNG to have a transparent background, call \ref setBackground(const QBrush &brush)
-  with no brush (Qt::NoBrush) or a transparent color (Qt::transparent), before saving.
+//  If you want the PNG to have a transparent background, call \ref setBackground(const QBrush &brush)
+//  with no brush (Qt::NoBrush) or a transparent color (Qt::transparent), before saving.
 
-  \warning If calling this function inside the constructor of the parent of the QCustomPlot widget
-  (i.e. the MainWindow constructor, if QCustomPlot is inside the MainWindow), always provide
-  explicit non-zero widths and heights. If you leave \a width or \a height as 0 (default), this
-  function uses the current width and height of the QCustomPlot widget. However, in Qt, these
-  aren't defined yet inside the constructor, so you would get an image that has strange
-  widths/heights.
+//  \warning If calling this function inside the constructor of the parent of the QCustomPlot widget
+//  (i.e. the MainWindow constructor, if QCustomPlot is inside the MainWindow), always provide
+//  explicit non-zero widths and heights. If you leave \a width or \a height as 0 (default), this
+//  function uses the current width and height of the QCustomPlot widget. However, in Qt, these
+//  aren't defined yet inside the constructor, so you would get an image that has strange
+//  widths/heights.
 
-  \see savePdf, saveBmp, saveJpg, saveRastered
-*/
+//  \see savePdf, saveBmp, saveJpg, saveRastered
+//*/
 bool QCustomPlot::savePng(const QString &fileName, int width, int height, double scale, int quality, int resolution, QCP::ResolutionUnit resolutionUnit)
 {
   return saveRastered(fileName, width, height, scale, "PNG", quality, resolution, resolutionUnit);

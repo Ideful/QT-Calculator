@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1252</width>
     <height>600</height>
    </rect>
   </property>
@@ -544,7 +544,7 @@ border-radius: 8px;</string>
      <string>^</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="cl_br_2">
+   <widget class="QPushButton" name="clear_all">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -562,7 +562,7 @@ border-radius: 8px;</string>
      <string>AC</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="cl_br_3">
+   <widget class="QPushButton" name="clear_sign">
     <property name="geometry">
      <rect>
       <x>360</x>
@@ -583,8 +583,8 @@ border-radius: 8px;</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>415</x>
-      <y>280</y>
+      <x>470</x>
+      <y>320</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -605,8 +605,8 @@ border-radius: 8px;</string>
    <widget class="QLineEdit" name="x_val">
     <property name="geometry">
      <rect>
-      <x>415</x>
-      <y>310</y>
+      <x>470</x>
+      <y>350</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -635,19 +635,220 @@ border-radius: 8px;</string>
      <string>mod</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="xbut">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>280</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(178,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+    <property name="text">
+     <string>x</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="xmin">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>410</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+    <property name="text">
+     <string>xmin</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="xmax">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>410</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+    <property name="text">
+     <string>xmax</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ymin">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>410</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+    <property name="text">
+     <string>ymin</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ymax">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>410</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+    <property name="text">
+     <string>ymax</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="xminval">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>450</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="xmaxval">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>450</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="yminval">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>450</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ymaxval">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>450</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="makegraph">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>410</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(78,216,206); 
+border: 1px solid black;
+border-radius: 8px;</string>
+    </property>
+    <property name="text">
+     <string>graph</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="graphwidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>719</x>
+      <y>180</y>
+      <width>331</width>
+      <height>211</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1252</width>
      <height>24</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
