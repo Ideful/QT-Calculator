@@ -327,7 +327,7 @@ double Calculator(std::string str) {
         st.pop();
     }
     // std::cout<<QueueToNumber(que);
-    std::cout<<sin(cos(pow(10, 2)))*43.1+sqrt(625)*(sin(4)+43.143*log10(100)-asin(0.4243))/log(sin(14.03))*sqrt(0.1)/pow(0.009, -3)*(std::fmod(12.34,62))<<"\n\n\n";
+    // std::cout<<sin(cos(pow(10, 2)))*43.1+sqrt(625)*(sin(4)+43.143*log10(100)-asin(0.4243))/log(sin(14.03))*sqrt(0.1)/pow(0.009, -3)*(std::fmod(12.34,62))<<"\n\n\n";
     return QueueToNumber(que);;
 }
 

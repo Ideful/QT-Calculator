@@ -69,8 +69,8 @@ public:
     QLineEdit *xmaxval;
     QLineEdit *yminval;
     QLineEdit *ymaxval;
-    QLabel *makegraph;
     QCustomPlot *graphwidget;
+    QPushButton *makegraph;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -345,16 +345,12 @@ public:
         ymaxval->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
 "border: 1px solid black;\n"
 "border-radius: 8px;"));
-        makegraph = new QLabel(centralwidget);
-        makegraph->setObjectName(QString::fromUtf8("makegraph"));
-        makegraph->setGeometry(QRect(470, 410, 41, 31));
-        makegraph->setStyleSheet(QString::fromUtf8("background-color: rgb(78,216,206); \n"
-"border: 1px solid black;\n"
-"border-radius: 8px;"));
-        makegraph->setAlignment(Qt::AlignCenter);
         graphwidget = new QCustomPlot(centralwidget);
         graphwidget->setObjectName(QString::fromUtf8("graphwidget"));
         graphwidget->setGeometry(QRect(719, 180, 331, 211));
+        makegraph = new QPushButton(centralwidget);
+        makegraph->setObjectName(QString::fromUtf8("makegraph"));
+        makegraph->setGeometry(QRect(480, 420, 100, 32));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));

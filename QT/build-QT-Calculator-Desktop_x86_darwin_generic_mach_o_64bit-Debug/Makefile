@@ -940,6 +940,12 @@ moc_mainwindow.cpp: ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/qwidget.h \
 		/usr/local/lib/QtGui.framework/Headers/QKeyEvent \
 		/usr/local/lib/QtGui.framework/Headers/qevent.h \
+		/usr/local/lib/QtCore.framework/Headers/QVector \
+		/usr/local/lib/QtCore.framework/Headers/qvector.h \
+		../QT-Calculator/qcustomplot.h \
+		/usr/local/lib/QtCore.framework/Headers/qmath.h \
+		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
+		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
 		moc_predefs.h \
 		/usr/local/share/qt/libexec/moc
 	/usr/local/share/qt/libexec/moc $(DEFINES) --include /Users/mirianfu/21/git/QT-Calculator/QT/build-QT-Calculator-Desktop_x86_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/usr/local/share/qt/mkspecs/macx-clang -I/Users/mirianfu/21/git/QT-Calculator/QT/QT-Calculator -I/usr/local/lib/QtWidgets.framework/Headers -I/usr/local/lib/QtGui.framework/Headers -I/usr/local/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/usr/local/lib ../QT-Calculator/mainwindow.h -o moc_mainwindow.cpp
@@ -986,6 +992,12 @@ main.o: ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/qwidget.h \
 		/usr/local/lib/QtGui.framework/Headers/QKeyEvent \
 		/usr/local/lib/QtGui.framework/Headers/qevent.h \
+		/usr/local/lib/QtCore.framework/Headers/QVector \
+		/usr/local/lib/QtCore.framework/Headers/qvector.h \
+		../QT-Calculator/qcustomplot.h \
+		/usr/local/lib/QtCore.framework/Headers/qmath.h \
+		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
+		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
 		/usr/local/lib/QtWidgets.framework/Headers/QApplication \
 		/usr/local/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../QT-Calculator/main.cpp
@@ -997,11 +1009,13 @@ mainwindow.o: ../QT-Calculator/mainwindow.cpp ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/qwidget.h \
 		/usr/local/lib/QtGui.framework/Headers/QKeyEvent \
 		/usr/local/lib/QtGui.framework/Headers/qevent.h \
-		ui_mainwindow.h \
+		/usr/local/lib/QtCore.framework/Headers/QVector \
+		/usr/local/lib/QtCore.framework/Headers/qvector.h \
 		../QT-Calculator/qcustomplot.h \
 		/usr/local/lib/QtCore.framework/Headers/qmath.h \
 		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
 		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
+		ui_mainwindow.h \
 		../../header.h \
 		../../errorchecker.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMessageBox \

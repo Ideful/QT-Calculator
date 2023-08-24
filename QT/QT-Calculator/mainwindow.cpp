@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "../../header.h"
 #include <QMessageBox>
+#define bigvalue 100000
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -54,14 +56,83 @@ void MainWindow::on_calculate_clicked()
             ui->CalcString->setText(res);
         } else {
             std::string xval = ui->x_val->text().toUtf8().data();
-            if (ui->x_val->text() == "" || XIsDouble(xval) == false) QMessageBox::warning(this,"error","wrong X input");
+            if (ui->x_val->text() == "" || IsDouble(xval) == false) QMessageBox::warning(this,"error","wrong X input");
             else {
-                InsertXVal(str,xval);
+                double x = ui->x_val->text().toDouble();
+                InsertXVal(str,x);
                 QString res = QString::number(Calculator(str));
                 ui->CalcString->setText(res);
             }
         }
     }
+}
+
+
+
+void MainWindow::on_makegraph_clicked()
+{
+    if (ui->CalcString->text() == "") QMessageBox::warning(this,"error","empty formulae");
+    else {
+        QVector<double>x,y;
+        std::string xminstr = ui->xminval->text().toUtf8().data();
+        std::string xmaxstr = ui->xmaxval->text().toUtf8().data();
+        std::string yminstr = ui->yminval->text().toUtf8().data();
+        std::string ymaxstr = ui->ymaxval->text().toUtf8().data();
+        double xminval = 0;
+        double xmaxval = 5;
+        double yminval = 0;
+        double ymaxval = 5;
+
+
+        if (xminstr != "") {
+            if (IsDouble(xminstr)) xminval = ui->xminval->text().toDouble();
+            else QMessageBox::warning(this,"error","wrong XMin input");
+        }
+
+        if (xmaxstr != "") {
+            if (IsDouble(xmaxstr)) xmaxval = ui->xmaxval->text().toDouble();
+            else QMessageBox::warning(this,"error","wrong XMax input");
+        }
+
+        if (yminstr != "") {
+            if (IsDouble(yminstr)) yminval = ui->yminval->text().toDouble();
+            else QMessageBox::warning(this,"error","wrong YMin input");
+        }
+
+        if (ymaxstr != "") {
+            if (IsDouble(ymaxstr)) ymaxval = ui->ymaxval->text().toDouble();
+            else QMessageBox::warning(this,"error","wrong XMin input");
+        }
+
+        ui->graphwidget->xAxis->setRange(xminval,xmaxval);
+        ui->graphwidget->yAxis->setRange(yminval,ymaxval);
+        if(ui->graphwidget->graph()) {
+            ui->graphwidget->graph()->data()->clear();
+            ui->graphwidget->replot();
+        }
+
+        for(double i = xminval, yval = 0, prevyval = 0;i <= xmaxval;i+=(xmaxval-xminval)/80000) {
+            std::string calcstr = ui->CalcString->text().toUtf8().data();
+            InsertXVal(calcstr,i);
+            yval = Calculator(calcstr);
+            if (yval - prevyval < -1000) {
+                ui->graphwidget->addGraph();
+                ui->graphwidget->graph()->addData(x,y);
+                x.clear();
+                y.clear();
+            } else {
+                x.push_back(i);
+                y.push_back(yval);
+            }
+            prevyval = yval;
+        }
+        ui->graphwidget->addGraph();
+        ui->graphwidget->graph()->addData(x,y);
+        ui->graphwidget->replot();
+        x.clear();
+        y.clear();
+    }
+
 }
 
 void MainWindow::entersign(){
@@ -87,5 +158,13 @@ void MainWindow::on_clear_sign_clicked()
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) on_calculate_clicked();
+    if (event->key() == Qt::Key_Escape) on_makegraph_clicked();
     else QMainWindow::keyPressEvent(event);
 }
+
+
+
+
+
+
+

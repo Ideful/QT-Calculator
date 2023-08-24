@@ -131,7 +131,7 @@ bool Errorchecker (std::string& str) {
     return true;
 }
 
-bool XIsDouble(std::string& str) {
+bool IsDouble(std::string& str) {
     uint16_t len = str.length();
     uint8_t dotcounter = 0;
     if (!isdigit(str[0]) && str[0] != '+' && str[0] != '-') return false;
@@ -143,14 +143,18 @@ bool XIsDouble(std::string& str) {
     return true;
 }
 
-void InsertXVal(std::string& str,std::string& xval) {
-    const uint16_t x = str.find('x');
-    const uint16_t len = str.length();
-    const std::string after_x = str.substr(x+1,len - 1);
-
-    str = str.substr(0,x);
-    str += xval;
-    str += after_x;
+void InsertXVal(std::string& str,double& xval) {
+    const uint64_t x = str.find('x');
+    const std::string after_x = str.substr(x+1,str.length() - 1);
+    const std::string xvalstr = std::to_string(xval);
+    if (x != std::string::npos) {
+        bool mult = 0;
+        if (std::isdigit(str[x-1])) mult = 1;
+        str = str.substr(0,x);
+        if (mult) str += '*';
+        str += xvalstr;
+        str += after_x;
+    }
 }
 
 bool StrContainsX(std::string& str) {

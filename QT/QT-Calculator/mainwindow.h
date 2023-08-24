@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QKeyEvent>
+#include <QVector>
+#include "qcustomplot.h"
 //#include "../../header.h"
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +26,8 @@ private slots:
     void on_clear_all_clicked();
     void on_clear_sign_clicked();
     void keyPressEvent(QKeyEvent* event) override;
+    void on_makegraph_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
