@@ -214,7 +214,6 @@ bool CheckIfFn(Lexem& lex) {
 }
 
 void LexProcessor(std::stack<Lexem>& stack, Lexem& lex, std::queue<Lexem>& que) {
-    // Prints(stack,lex);
     if (CheckIfFn(lex)) stack.push(lex);  // lex is function
     else if (lex.operation == ')') {  // lex is '('
         while(stack.top().operation != '(') { 
@@ -326,60 +325,9 @@ double Calculator(std::string str) {
         que.push(lex);
         st.pop();
     }
-    // std::cout<<QueueToNumber(que);
-    // std::cout<<sin(cos(pow(10, 2)))*43.1+sqrt(625)*(sin(4)+43.143*log10(100)-asin(0.4243))/log(sin(14.03))*sqrt(0.1)/pow(0.009, -3)*(std::fmod(12.34,62))<<"\n\n\n";
+
     return QueueToNumber(que);;
 }
-
-
-// void PrintQ(std::queue<Lexem> que) {
-//     while (!que.empty()) {
-//         if (que.front().type) {
-//             std::cout<<que.front().number<<" ";
-//         } else {
-//             std::cout<<que.front().operation<<" ";
-//         }
-//         que.pop();
-//     }
-//     std::cout<<'\n';
-// }
-
-// void Prints(std::stack<Lexem> st, Lexem lex) {
-//     std::cout<<"curr "<<lex.operation<<" "<<std::endl;
-//     while (!st.empty()) {
-//         std::cout<<st.top().operation<<" " <<std::endl;
-//         st.pop();
-//     }
-// }
-
-// void Printqwe(std::stack<Lexem> st) {
-//     while (!st.empty()) {
-//         std::cout<<st.top().operation<<" " <<std::endl;
-//         st.pop();
-//     }
-// }
-
-// void PrintQS(std::queue<Lexem> que, std::stack<double> st) {
-//     while (!que.empty()) {
-//         if (que.front().type) {
-//             std::cout<<que.front().number<<" ";
-//         } else {
-//             std::cout<<que.front().operation<<" ";
-//         }
-//         que.pop();
-//     }
-//     std::cout<<"        "<<st.top();
-//     std::cout<<'\n';
-// }
-
-// void Printsa(std::stack<Lexem> st, Lexem lex) {
-//     while (!st.empty()) {
-//         std::cout<<"__"<<st.top().operation<<" " <<std::endl;
-//         st.pop();
-//     }
-//     std::cout<<'\n';
-// }
-
 
 
 

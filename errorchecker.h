@@ -148,8 +148,7 @@ void InsertXVal(std::string& str,double& xval) {
     const std::string after_x = str.substr(x+1,str.length() - 1);
     const std::string xvalstr = std::to_string(xval);
     if (x != std::string::npos) {
-        bool mult = 0;
-        if (std::isdigit(str[x-1])) mult = 1;
+        bool mult = (std::isdigit(str[x-1]))? 1 : 0;
         str = str.substr(0,x);
         if (mult) str += '*';
         str += xvalstr;
