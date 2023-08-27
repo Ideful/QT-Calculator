@@ -4,96 +4,93 @@
 #include <stack>
 #include <queue>
 #include <cmath>
-#include <regex>
 #include "errorchecker.h"
-// #define digit true 
-// #define operation false
 
 struct Lexem {
-    // Lexem():type(0),operation(0),priority(0),number(0) {};
+    // Lexem():type_(0),operation_(0),priority_(0),number(0) {};
     Lexem() = default;
-    bool type;  // 1 is digit, 0 is operator
-    char operation;
-    int16_t priority;
-    long double number;
+    bool type_;  // 1 is digit, 0 is operator
+    char operation_;
+    int16_t priority_;
+    long double number_;
 };
 
 
-void Sum(std::stack<double>& st, double a, double b) {
+void Sum(std::stack<double>& st, double& a, double& b) {
     st.push(b+a);
 }
 
-void Mult(std::stack<double>& st, double a, double b) {
+void Mult(std::stack<double>& st, double& a, double& b) {
     st.push(b*a);
 }
 
-void Div(std::stack<double>& st, double a, double b) {
+void Div(std::stack<double>& st, double& a, double& b) {
     st.push(b/a);
 }
 
-void Sub(std::stack<double>& st, double a, double b) {
+void Sub(std::stack<double>& st, double& a, double& b) {
     st.push(b-a);
 }
 
-void Mod(std::stack<double>& st, double a, double b) {
+void Mod(std::stack<double>& st, double& a, double& b) {
     st.push(std::fmod(b,a));
 }
 
-void Pow(std::stack<double>& st, double a, double b) {
+void Pow(std::stack<double>& st, double& a, double& b) {
     st.push(std::pow(b,a));
 }
 
 // #############################################################################
 
 
-void UnaryCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, double a)) {
+void UnaryCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, double& a)) {
     double a = stack.top();
     stack.pop();
     fn(stack,a);
 }
 
-void Sin(std::stack<double>& st, double a) {
+void Sin(std::stack<double>& st, double& a) {
     st.push(std::sin(a));
 }
 
-void Cos(std::stack<double>& st, double a) {
+void Cos(std::stack<double>& st, double& a) {
     st.push(std::cos(a));
 }
 
-void Tan(std::stack<double>& st, double a) {
+void Tan(std::stack<double>& st, double& a) {
     st.push(std::tan(a));
 }
 
-void Asin(std::stack<double>& st, double a) {
+void Asin(std::stack<double>& st, double& a) {
     st.push(std::asin(a));
 }
 
-void Acos(std::stack<double>& st, double a) {
+void Acos(std::stack<double>& st, double& a) {
     st.push(std::acos(a));
 }
 
 
-void Atan(std::stack<double>& st, double a) {
+void Atan(std::stack<double>& st, double& a) {
     st.push(std::atan(a));
 }
 
-void Sqrt(std::stack<double>& st, double a) {
+void Sqrt(std::stack<double>& st, double& a) {
     st.push(std::sqrt(a));
 }
 
-void Ln(std::stack<double>& st, double a) {
+void Ln(std::stack<double>& st, double& a) {
     st.push(std::log(a));
 }
 
-void Log(std::stack<double>& st, double a) {
+void Log(std::stack<double>& st, double& a) {
     st.push(std::log10(a));   
 }
 
-void Unary_Sum(std::stack<double>& st, double a) {
+void Unary_Sum(std::stack<double>& st, double& a) {
     st.push(a);
 }
 
-void Unary_Sub(std::stack<double>& st, double a) {
+void Unary_Sub(std::stack<double>& st, double& a) {
     st.push(-a);
 }
 
@@ -120,10 +117,12 @@ Lexem LongFnToLexem(std::string::iterator& iter, size_t& len) {
             } else {    // sqrt q   
                 len = 4;
                 return {false, 'q',4,0};
-            }      
+            }    
+            break;  
         case 't':       // tan t
             len = 3;
             return {false, 't',4,0};
+            break;
         case 'a':
             ++iter;
             if (*iter == 'c') {     // acos
@@ -157,72 +156,72 @@ Lexem LongFnToLexem(std::string::iterator& iter, size_t& len) {
 void FnToLex(std::string::iterator& iter,Lexem& lex, size_t& i) {   // add unary
     switch (*iter) {
         case '+':
-            lex.operation = '+';
-            lex.priority = 1;
+            lex.operation_ = '+';
+            lex.priority_ = 1;
             i = 1;
             break;
         case '-':
-            lex.operation= '-';
-            lex.priority  = 1;  
+            lex.operation_= '-';
+            lex.priority_  = 1;  
             i = 1;   
             break;   
         case '#':
-            lex.operation = '#';
-            lex.priority = 5;
+            lex.operation_ = '#';
+            lex.priority_ = 5;
             i = 1;
             break;
         case '~':
-            lex.operation= '~';
-            lex.priority  = 5;  
+            lex.operation_= '~';
+            lex.priority_  = 5;  
             i = 1;   
             break;  
         case '*':
-            lex.operation= '*';
-            lex.priority  = 2;
+            lex.operation_= '*';
+            lex.priority_  = 2;
             i = 1;
             break;   
         case '/':
-            lex.operation= '/';
-            lex.priority  = 2;
+            lex.operation_= '/';
+            lex.priority_  = 2;
             i = 1;
             break;
         case '^':
-            lex.operation= '^';
-            lex.priority  = 3;
+            lex.operation_= '^';
+            lex.priority_  = 3;
             i = 1;
             break;
         case '(':
-            lex.operation= '(';
-            lex.priority  = 0;
+            lex.operation_= '(';
+            lex.priority_  = 0;
             i = 1;
             break;
         case ')':
-            lex.operation= ')';
-            lex.priority  = 0;
+            lex.operation_= ')';
+            lex.priority_  = 0;
             i = 1;
             break;
         default:
             lex = LongFnToLexem(iter,i);
     }
-    lex.type = false;
-    lex.number = 0;
+    lex.type_ = false;
+    lex.number_ = 0;
 }
 
 bool CheckIfFn(Lexem& lex) {
     std::string fn = "(cstaioqlg";
-    return (fn.find(lex.operation) == std::string::npos) ? false : true;
+    return (fn.find(lex.operation_) == std::string::npos) ? false : true;
 }
 
 void LexProcessor(std::stack<Lexem>& stack, Lexem& lex, std::queue<Lexem>& que) {
     if (CheckIfFn(lex)) stack.push(lex);  // lex is function
-    else if (lex.operation == ')') {  // lex is '('
-        while(stack.top().operation != '(') { 
+    else if (lex.operation_ == ')') {  // lex is '('
+        while(stack.top().operation_ != '(') { 
                 que.push(stack.top());
                 stack.pop();
         }
         stack.pop();
     } else { // lex is operator
-        while(stack.size() > 0 && (lex.priority < stack.top().priority || (lex.priority == stack.top().priority && lex.operation != '^'))) {
+        while(stack.size() > 0 && (lex.priority_ < stack.top().priority_ || (lex.priority_ == stack.top().priority_ && lex.operation_ != '^'))) {
             que.push(stack.top());
             stack.pop();
         }
@@ -231,7 +230,7 @@ void LexProcessor(std::stack<Lexem>& stack, Lexem& lex, std::queue<Lexem>& que) 
 }
 
 
-void BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, double a, double b) ){
+void BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, double& a, double& b) ){
     double a = stack.top();
     stack.pop();
     double b = stack.top();
@@ -242,31 +241,31 @@ void BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st,
 
 
 void CalculateQueue(std::queue<Lexem>& que, std::stack<double>& st) {
-    if (que.front().operation == '+') BinCalculator(st,Sum);
-    else if (que.front().operation == '-') BinCalculator(st,Sub);
-    else if (que.front().operation == '*') BinCalculator(st,Mult);
-    else if (que.front().operation == '/') BinCalculator(st,Div);
-    else if (que.front().operation == 'm') BinCalculator(st,Mod);
-    else if (que.front().operation == '^') BinCalculator(st,Pow);
+    if (que.front().operation_ == '+') BinCalculator(st,Sum);
+    else if (que.front().operation_ == '-') BinCalculator(st,Sub);
+    else if (que.front().operation_ == '*') BinCalculator(st,Mult);
+    else if (que.front().operation_ == '/') BinCalculator(st,Div);
+    else if (que.front().operation_ == 'm') BinCalculator(st,Mod);
+    else if (que.front().operation_ == '^') BinCalculator(st,Pow);
 
-    else if (que.front().operation == '#') UnaryCalculator(st,Unary_Sum);
-    else if (que.front().operation == '~') UnaryCalculator(st,Unary_Sub);
-    else if (que.front().operation == 'c') UnaryCalculator(st,Cos);
-    else if (que.front().operation == 's') UnaryCalculator(st,Sin);
-    else if (que.front().operation == 't') UnaryCalculator(st,Tan);
-    else if (que.front().operation == 'a') UnaryCalculator(st,Atan);
-    else if (que.front().operation == 'i') UnaryCalculator(st,Asin);
-    else if (que.front().operation == 'o') UnaryCalculator(st,Acos);
-    else if (que.front().operation == 'q') UnaryCalculator(st,Sqrt);
-    else if (que.front().operation == 'l') UnaryCalculator(st,Ln);
-    else if (que.front().operation == 'g') UnaryCalculator(st,Log);
+    else if (que.front().operation_ == '#') UnaryCalculator(st,Unary_Sum);
+    else if (que.front().operation_ == '~') UnaryCalculator(st,Unary_Sub);
+    else if (que.front().operation_ == 'c') UnaryCalculator(st,Cos);
+    else if (que.front().operation_ == 's') UnaryCalculator(st,Sin);
+    else if (que.front().operation_ == 't') UnaryCalculator(st,Tan);
+    else if (que.front().operation_ == 'a') UnaryCalculator(st,Atan);
+    else if (que.front().operation_ == 'i') UnaryCalculator(st,Asin);
+    else if (que.front().operation_ == 'o') UnaryCalculator(st,Acos);
+    else if (que.front().operation_ == 'q') UnaryCalculator(st,Sqrt);
+    else if (que.front().operation_ == 'l') UnaryCalculator(st,Ln);
+    else if (que.front().operation_ == 'g') UnaryCalculator(st,Log);
 }
 
 double QueueToNumber(std::queue<Lexem>& que) {
     std::stack<double> st;
     while (!que.empty()) {
-        if (que.front().type == true) { // digit
-            st.push(que.front().number);
+        if (que.front().type_ == true) { // digit
+            st.push(que.front().number_);
         } else {
             CalculateQueue(que,st);
         }
@@ -275,14 +274,14 @@ double QueueToNumber(std::queue<Lexem>& que) {
     return st.top();
 }
 
-void UnaryChecker(std::stack<Lexem>& stack, std::string::iterator& it, bool& is_unary) {
+void UnaryChecker(std::stack<Lexem>& stack, const std::string::iterator& it, bool& is_unary) {
     if (is_unary) {
         if (*it == '+') *it = '#';
         else *it = '~';
     } 
     else {
         if (!stack.empty()) {
-            if (stack.top().operation == '(') {
+            if (stack.top().operation_ == '(') {
                 if (*it == '+') *it = '#';
                 else *it = '~';           
             }
@@ -295,21 +294,33 @@ void SkipSpace(std::string& str, std::string::iterator& str_it) {
     str_it = str.begin();
 }
 
+void MultInserter(std::string& str) {
+    uint16_t len = str.length();
+    for(uint16_t i = 0; i < len - 1; i++) {
+        if (std::isdigit(str[i]) && (str[i+1] == 'a' || str[i+1] == 'c' || str[i+1] == 's' || str[i+1] == 't' || str[i+1] == 'l')) {
+            std::string tmp_after = str.substr(i+1,len);
+            str = str.substr(0,i+1);
+            str+='*';
+            str+=tmp_after;
+        }
+    }
+}
 
-double Calculator(std::string str) {
+double Calculator(std::string& str) {
     Lexem lex;
     std::string::iterator str_it = str.begin();
     std::queue<Lexem> que;
     std::stack<Lexem> st;
-    bool unary_sign(true);
+    bool unary_sign = true;
+    MultInserter(str);
     while(str_it != str.end()) {
         SkipSpace(str,str_it);
         size_t i = 0;
         if (isdigit(*str_it)) {
-            lex.number = std::stold(str,&i);
-            lex.type = true;
-            lex.operation = 0;
-            lex.priority = 0;
+            lex.number_ = std::stold(str,&i);
+            lex.type_ = true;
+            lex.operation_ = 0;
+            lex.priority_ = 0;
             que.push(lex);
         } else {
             if (*str_it == '+' || *str_it == '-') UnaryChecker(st,str_it,unary_sign);

@@ -1,6 +1,6 @@
 #include <string>
 
-bool StringValidator(std::string& str) {
+bool StringValidator(const std::string& str) {
     const std::string comparer = ".,0123456789+-*/^()sincotalgmdqrxe";
     for(const char& sym : str) {
         if (comparer.find(sym) == std::string::npos) return false;
@@ -8,7 +8,7 @@ bool StringValidator(std::string& str) {
     return true;
 }
 
-bool TwoAndMorePointsChecker(std::string& str, uint16_t& len) {
+bool TwoAndMorePointsChecker(const std::string& str,const  uint16_t& len) {
     for(uint16_t i = 0; i < len; i++) {
         if (str[i] == '.' || str[i] == ',') {
             if (i == len - 1 || i == 0) return false;
@@ -24,7 +24,7 @@ bool TwoAndMorePointsChecker(std::string& str, uint16_t& len) {
     return true;
 }
 
-bool OperatorChecker(std::string& str, uint16_t& len) {
+bool OperatorChecker(const std::string& str, const uint16_t& len) {
     std::string comparer = "(0123456789mctlsax";
     for(uint16_t i = 0; i < len; i++) {
         if (str[i] == '+' || str[i] == '+' || str[i] == '*' || str[i] == '/' || str[i] == '^') {
@@ -35,19 +35,19 @@ bool OperatorChecker(std::string& str, uint16_t& len) {
 }
 
 
-bool BeginChecker(std::string& str) {
+bool BeginChecker(const std::string& str) {
     std::string begin_comparer = " (0123456789cstalx+-";
     if (begin_comparer.find(str[0]) == std::string::npos) return false;
     return true;
 }
 
-bool EndChecker(std::string& str, uint16_t& len) {
+bool EndChecker(const std::string& str, const uint16_t& len) {
     std::string end_comparer = " 0123456789)x";
     if (end_comparer.find(str[len-1]) == std::string::npos) return false;
     return true;
 }
 
-bool DigitChecker(std::string& str, uint16_t& len) {
+bool DigitChecker(const std::string& str, const uint16_t& len) {
     std::string comparer = "0123456789ctmsal+-*/^.,)";
     for(uint16_t i = 0; i < len; i++) {
         if (isdigit(str[i])) {
@@ -58,7 +58,7 @@ bool DigitChecker(std::string& str, uint16_t& len) {
     return true;
 }
 
-bool BracketParser(std::string& str, uint16_t& len) {
+bool BracketParser(const std::string& str, const uint16_t& len) {
     uint8_t open = 0;
     uint8_t close = 0;
     for (uint16_t i = 0; i < len; i++) {
@@ -80,7 +80,7 @@ bool BracketParser(std::string& str, uint16_t& len) {
     return open == close? true : false;
 }
 
-bool FnChecker(std::string& str, uint16_t& len) {
+bool FnChecker(const std::string& str, const uint16_t& len) {
     for(uint16_t i = 0; i < len; i++) {
         switch (str[i]){
             case 'm':
@@ -118,7 +118,7 @@ bool FnChecker(std::string& str, uint16_t& len) {
     return true;
 }
 
-bool Errorchecker (std::string& str) {
+bool Errorchecker (const std::string& str) {
     uint16_t len = str.length();
     if (len > 255) return false;
     if (!StringValidator(str)) return false;
@@ -131,7 +131,7 @@ bool Errorchecker (std::string& str) {
     return true;
 }
 
-bool IsDouble(std::string& str) {
+bool IsDouble(const std::string& str) {
     uint16_t len = str.length();
     uint8_t dotcounter = 0;
     if (!isdigit(str[0]) && str[0] != '+' && str[0] != '-') return false;
@@ -143,19 +143,29 @@ bool IsDouble(std::string& str) {
     return true;
 }
 
-void InsertXVal(std::string& str,double& xval) {
-    const uint64_t x = str.find('x');
-    const std::string after_x = str.substr(x+1,str.length() - 1);
-    const std::string xvalstr = std::to_string(xval);
-    if (x != std::string::npos) {
-        bool mult = (std::isdigit(str[x-1]))? 1 : 0;
-        str = str.substr(0,x);
-        if (mult) str += '*';
-        str += xvalstr;
-        str += after_x;
+std::string InsertXVal(std::string& str,const double& xval) {
+    uint8_t xc = 0;
+    for(auto tmp: str) {
+        if (tmp == 'x') xc++;
     }
+    while(xc) {
+        const uint64_t x = str.find('x');
+        const std::string after_x = str.substr(x+1,str.length() - 1);
+        const std::string xvalstr = std::to_string(xval);
+        if (x != std::string::npos) {
+            bool mult = (std::isdigit(str[x-1]))? 1 : 0;
+            str = str.substr(0,x);
+            if (mult) str += "*(";
+            else str+= '(';
+            str += xvalstr;
+            str += ')';
+            str += after_x;
+        }
+        xc--;
+    }
+    return str;
 }
 
-bool StrContainsX(std::string& str) {
+bool StrContainsX(const std::string& str) {
     return (str.find('x') == std::string::npos) ? false : true;
 }

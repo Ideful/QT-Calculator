@@ -14,6 +14,8 @@ SOURCES += \
     qcustomplot.cpp
 
 HEADERS += \
+    ../../Controller.h \
+    ../../Model.h \
     mainwindow.h \
     qcustomplot.h
 

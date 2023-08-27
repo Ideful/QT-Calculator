@@ -68,10 +68,10 @@ void MainWindow::on_calculate_clicked()
 }
 
 
-
 void MainWindow::on_makegraph_clicked()
 {
-    if (ui->CalcString->text() == "") QMessageBox::warning(this,"error","empty formulae");
+    std::string str = ui->CalcString->text().toUtf8().data();
+    if (ui->CalcString->text() == "" || Errorchecker(str) == false) QMessageBox::warning(this,"error","wrong input");
     else {
         QVector<double>x,y;
         std::string xminstr = ui->xminval->text().toUtf8().data();
@@ -82,28 +82,22 @@ void MainWindow::on_makegraph_clicked()
         double xmaxval = 5;
         double yminval = 0;
         double ymaxval = 5;
-
-
         if (xminstr != "") {
             if (IsDouble(xminstr)) xminval = ui->xminval->text().toDouble();
             else QMessageBox::warning(this,"error","wrong XMin input");
         }
-
         if (xmaxstr != "") {
             if (IsDouble(xmaxstr)) xmaxval = ui->xmaxval->text().toDouble();
             else QMessageBox::warning(this,"error","wrong XMax input");
         }
-
         if (yminstr != "") {
             if (IsDouble(yminstr)) yminval = ui->yminval->text().toDouble();
             else QMessageBox::warning(this,"error","wrong YMin input");
         }
-
         if (ymaxstr != "") {
             if (IsDouble(ymaxstr)) ymaxval = ui->ymaxval->text().toDouble();
             else QMessageBox::warning(this,"error","wrong XMin input");
         }
-
         ui->graphwidget->xAxis->setRange(xminval,xmaxval);
         ui->graphwidget->yAxis->setRange(yminval,ymaxval);
         if(ui->graphwidget->graph()) {
