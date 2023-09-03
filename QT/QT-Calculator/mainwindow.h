@@ -6,7 +6,7 @@
 #include <QKeyEvent>
 #include <QVector>
 #include "qcustomplot.h"
-//#include "../../header.h"
+#include "../../Controller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,5 +30,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    Controller controller_;
 };
 #endif // MAINWINDOW_H

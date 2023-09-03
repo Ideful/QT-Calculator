@@ -52,11 +52,13 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../QT-Calculator/main.cpp \
+SOURCES       = ../../Model.cpp \
+		../QT-Calculator/main.cpp \
 		../QT-Calculator/mainwindow.cpp \
 		../QT-Calculator/qcustomplot.cpp moc_mainwindow.cpp \
 		moc_qcustomplot.cpp
-OBJECTS       = main.o \
+OBJECTS       = Model.o \
+		main.o \
 		mainwindow.o \
 		qcustomplot.o \
 		moc_mainwindow.o \
@@ -316,8 +318,11 @@ DIST          = /usr/local/share/qt/mkspecs/features/spec_pre.prf \
 		/usr/local/share/qt/mkspecs/features/exceptions.prf \
 		/usr/local/share/qt/mkspecs/features/yacc.prf \
 		/usr/local/share/qt/mkspecs/features/lex.prf \
-		../QT-Calculator/QT-Calculator.pro ../QT-Calculator/mainwindow.h \
-		../QT-Calculator/qcustomplot.h ../QT-Calculator/main.cpp \
+		../QT-Calculator/QT-Calculator.pro ../../Controller.h \
+		../../Model.h \
+		../QT-Calculator/mainwindow.h \
+		../QT-Calculator/qcustomplot.h ../../Model.cpp \
+		../QT-Calculator/main.cpp \
 		../QT-Calculator/mainwindow.cpp \
 		../QT-Calculator/qcustomplot.cpp
 QMAKE_TARGET  = QT-Calculator
@@ -893,8 +898,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/local/share/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../QT-Calculator/mainwindow.h ../QT-Calculator/qcustomplot.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.cpp ../QT-Calculator/qcustomplot.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Controller.h ../../Model.h ../QT-Calculator/mainwindow.h ../QT-Calculator/qcustomplot.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Model.cpp ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.cpp ../QT-Calculator/qcustomplot.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../QT-Calculator/mainwindow.ui $(DISTDIR)/
 
 
@@ -946,6 +951,8 @@ moc_mainwindow.cpp: ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtCore.framework/Headers/qmath.h \
 		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
 		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
+		../../Controller.h \
+		../../Model.h \
 		moc_predefs.h \
 		/usr/local/share/qt/libexec/moc
 	/usr/local/share/qt/libexec/moc $(DEFINES) --include /Users/mirianfu/21/git/QT-Calculator/QT/build-QT-Calculator-Desktop_x86_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/usr/local/share/qt/mkspecs/macx-clang -I/Users/mirianfu/21/git/QT-Calculator/QT/QT-Calculator -I/usr/local/lib/QtWidgets.framework/Headers -I/usr/local/lib/QtGui.framework/Headers -I/usr/local/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/usr/local/lib ../QT-Calculator/mainwindow.h -o moc_mainwindow.cpp
@@ -985,6 +992,9 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
+Model.o: ../../Model.cpp ../../Model.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Model.o ../../Model.cpp
+
 main.o: ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -998,6 +1008,8 @@ main.o: ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtCore.framework/Headers/qmath.h \
 		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
 		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
+		../../Controller.h \
+		../../Model.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QApplication \
 		/usr/local/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../QT-Calculator/main.cpp
@@ -1015,9 +1027,9 @@ mainwindow.o: ../QT-Calculator/mainwindow.cpp ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtCore.framework/Headers/qmath.h \
 		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
 		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
+		../../Controller.h \
+		../../Model.h \
 		ui_mainwindow.h \
-		../../header.h \
-		../../errorchecker.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMessageBox \
 		/usr/local/lib/QtWidgets.framework/Headers/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../QT-Calculator/mainwindow.cpp

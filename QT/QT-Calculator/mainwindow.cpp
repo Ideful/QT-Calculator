@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "../../header.h"
 #include <QMessageBox>
-#define bigvalue 100000
+#define step 80000
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -49,83 +48,92 @@ MainWindow::~MainWindow()
 void MainWindow::on_calculate_clicked()
 {
     std::string str = ui->CalcString->text().toUtf8().data();
-    if (Errorchecker(str) == false) QMessageBox::warning(this,"error","wrong input");
+    std::string xval = ui->x_val->text().toUtf8().data();
+    // controller_.InitString(str);
+    std::pair<std::string,double> qwe = controller_.method(str,xval);
+    if (qwe.first != "")  QMessageBox::warning(this,"error", QString::fromStdString(qwe.first));
     else {
-        if (!StrContainsX(str)) {
-            QString res = QString::number(Calculator(str));
-            ui->CalcString->setText(res);
-        } else {
-            std::string xval = ui->x_val->text().toUtf8().data();
-            if (ui->x_val->text() == "" || IsDouble(xval) == false) QMessageBox::warning(this,"error","wrong X input");
-            else {
-                double x = ui->x_val->text().toDouble();
-                InsertXVal(str,x);
-                QString res = QString::number(Calculator(str));
-                ui->CalcString->setText(res);
-            }
-        }
+        QString res = QString::number(qwe.second);
+        ui->CalcString->setText(res);
     }
+    // if (controller_.model_.CheckForErrors() == false) QMessageBox::warning(this,"error","wrong input");
+    // else {
+    //     if (controller_.model_.StringContainsX() == false) {
+    //         QString res = QString::number(controller_.GetRes());
+    //         ui->CalcString->setText(res);
+    //     } else {
+    //         std::string xval = ui->x_val->text().toUtf8().data();
+    //         if (ui->x_val->text() == "" || controller_.model_.XValueValidator(xval) == false) QMessageBox::warning(this,"error","wrong X input");
+    //         else {
+    //             controller_.model_.SetXValue(ui->x_val->text().toDouble());
+    //             QString res = QString::number(controller_.GetRes());
+    //             ui->CalcString->setText(res);
+    //         }
+    //     }
+    // }
 }
 
 
 void MainWindow::on_makegraph_clicked()
 {
-    std::string str = ui->CalcString->text().toUtf8().data();
-    if (ui->CalcString->text() == "" || Errorchecker(str) == false) QMessageBox::warning(this,"error","wrong input");
-    else {
-        QVector<double>x,y;
-        std::string xminstr = ui->xminval->text().toUtf8().data();
-        std::string xmaxstr = ui->xmaxval->text().toUtf8().data();
-        std::string yminstr = ui->yminval->text().toUtf8().data();
-        std::string ymaxstr = ui->ymaxval->text().toUtf8().data();
-        double xminval = 0;
-        double xmaxval = 5;
-        double yminval = 0;
-        double ymaxval = 5;
-        if (xminstr != "") {
-            if (IsDouble(xminstr)) xminval = ui->xminval->text().toDouble();
-            else QMessageBox::warning(this,"error","wrong XMin input");
-        }
-        if (xmaxstr != "") {
-            if (IsDouble(xmaxstr)) xmaxval = ui->xmaxval->text().toDouble();
-            else QMessageBox::warning(this,"error","wrong XMax input");
-        }
-        if (yminstr != "") {
-            if (IsDouble(yminstr)) yminval = ui->yminval->text().toDouble();
-            else QMessageBox::warning(this,"error","wrong YMin input");
-        }
-        if (ymaxstr != "") {
-            if (IsDouble(ymaxstr)) ymaxval = ui->ymaxval->text().toDouble();
-            else QMessageBox::warning(this,"error","wrong XMin input");
-        }
-        ui->graphwidget->xAxis->setRange(xminval,xmaxval);
-        ui->graphwidget->yAxis->setRange(yminval,ymaxval);
-        if(ui->graphwidget->graph()) {
-            ui->graphwidget->graph()->data()->clear();
-            ui->graphwidget->replot();
-        }
+    // std::string str = ui->CalcString->text().toUtf8().data();
+    // controller_.InitString(str);
+    // if (ui->CalcString->text() == "" || controller_.model_.CheckForErrors() == false) QMessageBox::warning(this,"error","wrong input");
+    // else {
+    //     QVector<double>x,y;
+    //     std::string xminstr = ui->xminval->text().toUtf8().data();
+    //     std::string xmaxstr = ui->xmaxval->text().toUtf8().data();
+    //     std::string yminstr = ui->yminval->text().toUtf8().data();
+    //     std::string ymaxstr = ui->ymaxval->text().toUtf8().data();
+    //     double xminval = 0;
+    //     double xmaxval = 5;
+    //     double yminval = 0;
+    //     double ymaxval = 5;
+    //     if (xminstr != "") {
+    //         if (controller_.model_.IsDouble(xminstr)) xminval = ui->xminval->text().toDouble();
+    //         else QMessageBox::warning(this,"error","wrong XMin input");
+    //     }
+    //     if (xmaxstr != "") {
+    //         if (controller_.model_.IsDouble(xmaxstr)) xmaxval = ui->xmaxval->text().toDouble();
+    //         else QMessageBox::warning(this,"error","wrong XMax input");
+    //     }
+    //     if (yminstr != "") {
+    //         if (controller_.model_.IsDouble(yminstr)) yminval = ui->yminval->text().toDouble();
+    //         else QMessageBox::warning(this,"error","wrong YMin input");
+    //     }
+    //     if (ymaxstr != "") {
+    //         if (controller_.model_.IsDouble(ymaxstr)) ymaxval = ui->ymaxval->text().toDouble();
+    //         else QMessageBox::warning(this,"error","wrong XMin input");
+    //     }
+    //     ui->graphwidget->xAxis->setRange(xminval,xmaxval);
+    //     ui->graphwidget->yAxis->setRange(yminval,ymaxval);
+    //     if(ui->graphwidget->graph()) {
+    //         ui->graphwidget->graph()->data()->clear();
+    //         ui->graphwidget->replot();
+    //     }
 
-        for(double i = xminval, yval = 0, prevyval = 0;i <= xmaxval;i+=(xmaxval-xminval)/80000) {
-            std::string calcstr = ui->CalcString->text().toUtf8().data();
-            InsertXVal(calcstr,i);
-            yval = Calculator(calcstr);
-            if (yval - prevyval < -1000) {
-                ui->graphwidget->addGraph();
-                ui->graphwidget->graph()->addData(x,y);
-                x.clear();
-                y.clear();
-            } else {
-                x.push_back(i);
-                y.push_back(yval);
-            }
-            prevyval = yval;
-        }
-        ui->graphwidget->addGraph();
-        ui->graphwidget->graph()->addData(x,y);
-        ui->graphwidget->replot();
-        x.clear();
-        y.clear();
-    }
+    //     for(double i = xminval, yval = 0, prevyval = 0;i <= xmaxval;i+=(xmaxval-xminval)/step) {
+    //         std::string calcstr = ui->CalcString->text().toUtf8().data();
+    //         controller_.InitString(calcstr);
+    //         controller_.model_.SetXValue(i);
+    //         yval = controller_.GetRes();
+    //         if (yval - prevyval < -1000) {
+    //             ui->graphwidget->addGraph();
+    //             ui->graphwidget->graph()->addData(x,y);
+    //             x.clear();
+    //             y.clear();
+    //         } else {
+    //             x.push_back(i);
+    //             y.push_back(yval);
+    //         }
+    //         prevyval = yval;
+    //     }
+    //     ui->graphwidget->addGraph();
+    //     ui->graphwidget->graph()->addData(x,y);
+    //     ui->graphwidget->replot();
+    //     x.clear();
+    //     y.clear();
+    // }
 
 }
 
