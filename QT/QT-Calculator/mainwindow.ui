@@ -606,7 +606,7 @@ border-radius: 8px;</string>
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>350</y>
+      <y>360</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -638,7 +638,7 @@ border-radius: 8px;</string>
    <widget class="QPushButton" name="xbut">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>420</x>
       <y>280</y>
       <width>31</width>
       <height>31</height>
@@ -656,8 +656,8 @@ border-radius: 8px;</string>
    <widget class="QLabel" name="xmin">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>410</y>
+      <x>220</x>
+      <y>320</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -677,8 +677,8 @@ border-radius: 8px;</string>
    <widget class="QLabel" name="xmax">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>410</y>
+      <x>280</x>
+      <y>320</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -698,8 +698,8 @@ border-radius: 8px;</string>
    <widget class="QLabel" name="ymin">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>410</y>
+      <x>345</x>
+      <y>320</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -720,7 +720,7 @@ border-radius: 8px;</string>
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>410</y>
+      <y>320</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -740,8 +740,8 @@ border-radius: 8px;</string>
    <widget class="QLineEdit" name="xminval">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>450</y>
+      <x>220</x>
+      <y>360</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -755,8 +755,8 @@ border-radius: 8px;</string>
    <widget class="QLineEdit" name="xmaxval">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>450</y>
+      <x>280</x>
+      <y>360</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -770,8 +770,8 @@ border-radius: 8px;</string>
    <widget class="QLineEdit" name="yminval">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>450</y>
+      <x>345</x>
+      <y>360</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -786,7 +786,7 @@ border-radius: 8px;</string>
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>450</y>
+      <y>360</y>
       <width>41</width>
       <height>31</height>
      </rect>
@@ -810,8 +810,8 @@ border-radius: 8px;</string>
    <widget class="QPushButton" name="makegraph">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>420</y>
+      <x>320</x>
+      <y>410</y>
       <width>100</width>
       <height>32</height>
      </rect>

@@ -1,80 +1,80 @@
 #include "Model.h"
 
-void Model::Sum(std::stack<double>& st, double& a, double& b) {
+void Model::Sum(std::stack<double>& st, const double& a, const double& b) {
     st.push(b+a);
 }
 
-void Model::Mult(std::stack<double>& st, double& a, double& b) {
+void Model::Mult(std::stack<double>& st, const double& a, const double& b) {
     st.push(b*a);
 }
 
-void Model::Div(std::stack<double>& st, double& a, double& b) {
+void Model::Div(std::stack<double>& st, const double& a, const double& b) {
     st.push(b/a);
 }
 
-void Model::Sub(std::stack<double>& st, double& a, double& b) {
+void Model::Sub(std::stack<double>& st, const double& a, const double& b) {
     st.push(b-a);
 }
 
-void Model::Mod(std::stack<double>& st, double& a, double& b) {
+void Model::Mod(std::stack<double>& st, const double& a, const double& b) {
     st.push(std::fmod(b,a));
 }
 
-void Model::Pow(std::stack<double>& st, double& a, double& b) {
+void Model::Pow(std::stack<double>& st, const double& a, const double& b) {
     st.push(std::pow(b,a));
 }
 
 // #############################################################################
 
 
-void Model::UnaryCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, double& a)) {
+void Model::UnaryCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, const double& a)) {
     double a = stack.top();
     stack.pop();
     fn(stack,a);
 }
 
-void Model::Sin(std::stack<double>& st, double& a) {
+void Model::Sin(std::stack<double>& st, const double& a) {
     st.push(std::sin(a));
 }
 
-void Model::Cos(std::stack<double>& st, double& a) {
+void Model::Cos(std::stack<double>& st, const double& a) {
     st.push(std::cos(a));
 }
 
-void Model::Tan(std::stack<double>& st, double& a) {
+void Model::Tan(std::stack<double>& st, const double& a) {
     st.push(std::tan(a));
 }
 
-void Model::Asin(std::stack<double>& st, double& a) {
+void Model::Asin(std::stack<double>& st, const double& a) {
     st.push(std::asin(a));
 }
 
-void Model::Acos(std::stack<double>& st, double& a) {
+void Model::Acos(std::stack<double>& st, const double& a) {
     st.push(std::acos(a));
 }
 
 
-void Model::Atan(std::stack<double>& st, double& a) {
+void Model::Atan(std::stack<double>& st, const double& a) {
     st.push(std::atan(a));
 }
 
-void Model::Sqrt(std::stack<double>& st, double& a) {
+void Model::Sqrt(std::stack<double>& st, const double& a) {
     st.push(std::sqrt(a));
 }
 
-void Model::Ln(std::stack<double>& st, double& a) {
+void Model::Ln(std::stack<double>& st, const double& a) {
     st.push(std::log(a));
 }
 
-void Model::Log(std::stack<double>& st, double& a) {
+void Model::Log(std::stack<double>& st, const double& a) {
     st.push(std::log10(a));   
 }
 
-void Model::Unary_Sum(std::stack<double>& st, double& a) {
+void Model::Unary_Sum(std::stack<double>& st, const double& a) {
     st.push(a);
 }
 
-void Model::Unary_Sub(std::stack<double>& st, double& a) {
+void Model::Unary_Sub(std::stack<double>& st, const double& a) {
     st.push(-a);
 }
 
@@ -84,7 +84,7 @@ Model::Lexem Model::LongFnToLexem(std::string::iterator& iter, size_t& len) {
             ++iter;
             if ( *iter == 'o') {
                 len = 3;
-                return {false, 'm',2,0};
+                return {false, 'm',2,0.};
             }
             break;
         case 'c':       // cos
@@ -191,7 +191,7 @@ void Model::FnToLex(std::string::iterator& iter,Model::Lexem& lex, size_t& i) { 
     lex.number_ = 0;
 }
 
-bool Model::CheckIfFn(Model::Lexem& lex) {
+bool Model::CheckIfFn(const Model::Lexem& lex) {
     std::string fn = "(cstaioqlg";
     return (fn.find(lex.operation_) == std::string::npos) ? false : true;
 }
@@ -214,7 +214,7 @@ void Model::LexProcessor(std::stack<Model::Lexem>& stack, Model::Lexem& lex, std
 }
 
 
-void Model::BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, double& a, double& b) ){
+void Model::BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, const double& a, const double& b) ){
     double a = stack.top();
     stack.pop();
     double b = stack.top();
@@ -258,7 +258,7 @@ double Model::QueueToNumber(std::queue<Model::Lexem>& que) {
     return st.top();
 }
 
-void Model::UnaryChecker(std::stack<Model::Lexem>& stack, const std::string::iterator& it, bool& is_unary) {
+void Model::UnaryChecker(const std::stack<Model::Lexem>& stack, const std::string::iterator& it, const bool& is_unary) {
     if (is_unary) {
         if (*it == '+') *it = '#';
         else *it = '~';
@@ -290,7 +290,7 @@ void Model::MultInserter(std::string& str) {
     }
 }
 
-double Model::Calculator(std::string str) {
+double Model::Calculator(std::string& str) {
     Lexem lex;
     std::string::iterator str_it = str.begin();
     std::queue<Lexem> que;
@@ -320,27 +320,26 @@ double Model::Calculator(std::string str) {
         que.push(lex);
         st.pop();
     }
+
     return QueueToNumber(que);;
 }
 
 bool Model::StringValidator(const std::string& str) {
-    const std::string comparer = ".,0123456789+-*/^()sincotalgmdqrxe";
+    const std::string comparer = ".,0123456789+-*/^()sincotalgmdqrxe ";
     for(const char& sym : str) {
         if (comparer.find(sym) == std::string::npos) return false;
     }
     return true;
 }
 
-bool Model::TwoAndMorePointsChecker(const std::string& str,const  uint16_t& len) {
+bool Model::TwoAndMorePointsChecker(const std::string& str, const uint16_t& len) {
     for(uint16_t i = 0; i < len; i++) {
         if (str[i] == '.' || str[i] == ',') {
             if (i == len - 1 || i == 0) return false;
             if (!isdigit(str[i-1])) return false;
-            if (!isdigit(str[++i])) return false;
-            while(isdigit(str[i])) {
-                if (i != len - 1) i++;   
-            }
-            std::string comparer = "+-*/^)m0123456789";
+            i++;
+            while(i != len - 1 && isdigit(str[i])) i++;   
+            std::string comparer = "0123456789+-*/m^) ";
             if (comparer.find(str[i]) == std::string::npos) return false;
         }
     }
@@ -348,7 +347,7 @@ bool Model::TwoAndMorePointsChecker(const std::string& str,const  uint16_t& len)
 }
 
 bool Model::OperatorChecker(const std::string& str, const uint16_t& len) {
-    std::string comparer = "(0123456789mctlsax";
+    std::string comparer = " (0123456789mctlsax";
     for(uint16_t i = 0; i < len; i++) {
         if (str[i] == '+' || str[i] == '+' || str[i] == '*' || str[i] == '/' || str[i] == '^') {
             if (comparer.find(str[i+1]) == std::string::npos) return false;
@@ -387,7 +386,6 @@ bool Model::BracketParser(const std::string& str, const uint16_t& len) {
     for (uint16_t i = 0; i < len; i++) {
         if (str[i] == '(') {
             open++;
-
             uint16_t cnt = i+1;
             bool f = false;
             while(str[cnt] != ')') {
@@ -466,16 +464,16 @@ bool Model::IsDouble(const std::string& str) {
     return true;
 }
 
-std::string Model::InsertXVal(std::string& str,const double& xval) {
+std::string Model::InsertXVal(std::string str,const double& xval) {
     uint8_t xc = 0;
     for(const auto& tmp: str) {
         if (tmp == 'x') xc++;
     }
     while(xc) {
         const uint64_t x = str.find('x');
-        const std::string after_x = str.substr(x+1,str.length() - 1);
-        const std::string xvalstr = std::to_string(xval);
         if (x != std::string::npos) {
+            const std::string after_x = str.substr(x+1,str.length() - 1);
+            const std::string xvalstr = std::to_string(xval);
             bool mult = (std::isdigit(str[x-1]))? 1 : 0;
             str = str.substr(0,x);
             if (mult) str += "*(";

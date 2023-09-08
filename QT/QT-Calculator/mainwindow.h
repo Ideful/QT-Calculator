@@ -31,5 +31,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Controller controller_;
+    int graphcounter = 0;
 };
 #endif // MAINWINDOW_H

@@ -3,9 +3,7 @@
 #include <QMessageBox>
 #define step 80000
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -49,92 +47,64 @@ void MainWindow::on_calculate_clicked()
 {
     std::string str = ui->CalcString->text().toUtf8().data();
     std::string xval = ui->x_val->text().toUtf8().data();
-    // controller_.InitString(str);
-    std::pair<std::string,double> qwe = controller_.method(str,xval);
+    std::pair<std::string,double> qwe = controller_.GetRes(str,xval);
     if (qwe.first != "")  QMessageBox::warning(this,"error", QString::fromStdString(qwe.first));
     else {
         QString res = QString::number(qwe.second);
         ui->CalcString->setText(res);
     }
-    // if (controller_.model_.CheckForErrors() == false) QMessageBox::warning(this,"error","wrong input");
-    // else {
-    //     if (controller_.model_.StringContainsX() == false) {
-    //         QString res = QString::number(controller_.GetRes());
-    //         ui->CalcString->setText(res);
-    //     } else {
-    //         std::string xval = ui->x_val->text().toUtf8().data();
-    //         if (ui->x_val->text() == "" || controller_.model_.XValueValidator(xval) == false) QMessageBox::warning(this,"error","wrong X input");
-    //         else {
-    //             controller_.model_.SetXValue(ui->x_val->text().toDouble());
-    //             QString res = QString::number(controller_.GetRes());
-    //             ui->CalcString->setText(res);
-    //         }
-    //     }
-    // }
 }
 
 
 void MainWindow::on_makegraph_clicked()
 {
-    // std::string str = ui->CalcString->text().toUtf8().data();
-    // controller_.InitString(str);
-    // if (ui->CalcString->text() == "" || controller_.model_.CheckForErrors() == false) QMessageBox::warning(this,"error","wrong input");
-    // else {
-    //     QVector<double>x,y;
-    //     std::string xminstr = ui->xminval->text().toUtf8().data();
-    //     std::string xmaxstr = ui->xmaxval->text().toUtf8().data();
-    //     std::string yminstr = ui->yminval->text().toUtf8().data();
-    //     std::string ymaxstr = ui->ymaxval->text().toUtf8().data();
-    //     double xminval = 0;
-    //     double xmaxval = 5;
-    //     double yminval = 0;
-    //     double ymaxval = 5;
-    //     if (xminstr != "") {
-    //         if (controller_.model_.IsDouble(xminstr)) xminval = ui->xminval->text().toDouble();
-    //         else QMessageBox::warning(this,"error","wrong XMin input");
-    //     }
-    //     if (xmaxstr != "") {
-    //         if (controller_.model_.IsDouble(xmaxstr)) xmaxval = ui->xmaxval->text().toDouble();
-    //         else QMessageBox::warning(this,"error","wrong XMax input");
-    //     }
-    //     if (yminstr != "") {
-    //         if (controller_.model_.IsDouble(yminstr)) yminval = ui->yminval->text().toDouble();
-    //         else QMessageBox::warning(this,"error","wrong YMin input");
-    //     }
-    //     if (ymaxstr != "") {
-    //         if (controller_.model_.IsDouble(ymaxstr)) ymaxval = ui->ymaxval->text().toDouble();
-    //         else QMessageBox::warning(this,"error","wrong XMin input");
-    //     }
-    //     ui->graphwidget->xAxis->setRange(xminval,xmaxval);
-    //     ui->graphwidget->yAxis->setRange(yminval,ymaxval);
-    //     if(ui->graphwidget->graph()) {
-    //         ui->graphwidget->graph()->data()->clear();
-    //         ui->graphwidget->replot();
-    //     }
+     std::string str = ui->CalcString->text().toUtf8().data();
+     if (!controller_.CheckIfInputStringIsOk(str)) QMessageBox::warning(this,"error","wrong input");
+     else {
+         std::vector<std::string> edges;
+         edges.push_back(ui->xminval->text().toUtf8().data());
+         edges.push_back(ui->xmaxval->text().toUtf8().data());
+         edges.push_back(ui->yminval->text().toUtf8().data());
+         edges.push_back(ui->ymaxval->text().toUtf8().data());
+         
+         std::vector<double> edgesval;
+         edgesval.push_back(0);
+         edgesval.push_back(5);
+         edgesval.push_back(0);
+         edgesval.push_back(5);
 
-    //     for(double i = xminval, yval = 0, prevyval = 0;i <= xmaxval;i+=(xmaxval-xminval)/step) {
-    //         std::string calcstr = ui->CalcString->text().toUtf8().data();
-    //         controller_.InitString(calcstr);
-    //         controller_.model_.SetXValue(i);
-    //         yval = controller_.GetRes();
-    //         if (yval - prevyval < -1000) {
-    //             ui->graphwidget->addGraph();
-    //             ui->graphwidget->graph()->addData(x,y);
-    //             x.clear();
-    //             y.clear();
-    //         } else {
-    //             x.push_back(i);
-    //             y.push_back(yval);
-    //         }
-    //         prevyval = yval;
-    //     }
-    //     ui->graphwidget->addGraph();
-    //     ui->graphwidget->graph()->addData(x,y);
-    //     ui->graphwidget->replot();
-    //     x.clear();
-    //     y.clear();
-    // }
-
+        std::vector<std::string> validator = controller_.ValidateGraphEdges(edgesval,edges);
+        if (validator.size()) {
+            for(size_t i = 0; i < validator.size(); i++) {
+                QMessageBox::warning(this,"error",QString::fromStdString(validator[i]));
+            }
+        }
+        if (validator.size() == 0) {
+            ui->graphwidget->xAxis->setRange(edgesval[0],edgesval[1]);
+            ui->graphwidget->yAxis->setRange(edgesval[2],edgesval[3]);
+            if (ui->graphwidget->graph()) {
+                for(int i = 0; i < graphcounter; i++) {
+                    ui->graphwidget->graph(i)->data()->clear();
+                }
+                ui->graphwidget->replot();
+            }
+            std::vector<double> x;
+            std::vector<double> y;
+            double i = edgesval[0];
+            while (i <= edgesval[1]) {
+                if(!x.empty()) x.clear();
+                if(!y.empty()) y.clear();
+                controller_.MakeGraph(x,y,edgesval,str,i);
+                ui->graphwidget->addGraph();
+                graphcounter++;
+                ui->graphwidget->graph()->addData(
+                    QVector<double>(x.begin(), x.end()),
+                    QVector<double>(y.begin(), y.end())
+                );
+                ui->graphwidget->replot();
+            }
+        }
+    }
 }
 
 void MainWindow::entersign(){
