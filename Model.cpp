@@ -224,7 +224,7 @@ void Model::BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<doubl
 
 
 void Model::CalculateQueue(std::queue<Model::Lexem>& que, std::stack<double>& st) {
-         if (que.front().operation_ == '+') BinCalculator(st,Sum);
+    if (que.front().operation_ == '+') BinCalculator(st,Sum);
     else if (que.front().operation_ == '-') BinCalculator(st,Sub);
     else if (que.front().operation_ == '*') BinCalculator(st,Mult);
     else if (que.front().operation_ == '/') BinCalculator(st,Div);
