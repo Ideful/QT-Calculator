@@ -224,7 +224,7 @@ void Model::BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<doubl
 
 
 void Model::CalculateQueue(std::queue<Model::Lexem>& que, std::stack<double>& st) {
-    if (que.front().operation_ == '+') BinCalculator(st,Sum);
+         if (que.front().operation_ == '+') BinCalculator(st,Sum);
     else if (que.front().operation_ == '-') BinCalculator(st,Sub);
     else if (que.front().operation_ == '*') BinCalculator(st,Mult);
     else if (que.front().operation_ == '/') BinCalculator(st,Div);
@@ -280,7 +280,7 @@ void Model::SkipSpace(std::string& str, std::string::iterator& str_it) noexcept 
 void Model::MultInserter(std::string& str) {
     uint16_t len = str.length();
     for(uint16_t i = 0; i < len - 1; i++) {
-        if (std::isdigit(str[i]) && (str[i+1] == 'a' || str[i+1] == 'c' || str[i+1] == 's' || str[i+1] == 't' || str[i+1] == 'l')) {
+        if ((std::isdigit(str[i]) && (str[i+1] == 'a' || str[i+1] == 'c' || str[i+1] == 's' || str[i+1] == 't' || str[i+1] == 'l')) || (str[i] == ')' && str[i+1] == '(')) {
             std::string tmp_after = str.substr(i+1,len);
             str = str.substr(0,i+1);
             str+='*';
