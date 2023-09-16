@@ -180,13 +180,13 @@ class Model{
         void BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, const double& a, const double& b));
 
         /**
-         * @brief parses string and return its part as a Lexem
+         * @brief fills lexem value
          * 
          * @param iter string iterator
-         * @param len amount of string symbols which represents one lexem
-         * @return Lexem 
+         * @param lex lexem to be filled
+         * @param len current position in string
          */
-        Lexem LongFnToLexem(std::string::iterator& iter, size_t& len);
+        void LongFnToLexem(std::string::iterator& iter,Model::Lexem& lex, size_t& len) noexcept;
 
         /**
          * @brief parses string and fills lexem
@@ -195,7 +195,7 @@ class Model{
          * @param lex lexem to be filled
          * @param i amount of string symbols which represents one lexem
          */
-        void FnToLex(std::string::iterator& iter,Lexem& lex, size_t& i);
+        void FnToLex(std::string::iterator& iter,Lexem& lex, size_t& i) noexcept;
 
         /**
          * @brief Checks if lexem is an operator or number(x)
@@ -246,7 +246,7 @@ class Model{
          * @param str string
          * @param str_it iterator
          */
-        void SkipSpace(std::string& str, std::string::iterator& str_it);
+        void SkipSpace(std::string& str, std::string::iterator& str_it) noexcept;
 
         /**
          * @brief inserts "*" in a string if required
@@ -254,6 +254,9 @@ class Model{
          * @param str string
          */
         void MultInserter(std::string& str);
+
+        void ClearStackAddtoQueue(std::stack<Lexem>& stack, std::queue<Lexem>& q);
+
         /**
          * @brief Calculation function
          * 
@@ -273,7 +276,7 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool BeginChecker(const std::string& str);
+        bool BeginChecker(const std::string& str) noexcept;
 
         /**
          * @brief checks if end symbol of string is valid
@@ -283,17 +286,17 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool EndChecker(const std::string& str, const uint16_t& len);
+        bool EndChecker(const std::string& str, const uint16_t& len) noexcept;
 
-        /**
-         * @brief checks validity of string
-         * 
-         * @param str string
-         * @param len string length
-         * @return true 
-         * @return false 
-         */
-        bool DigitChecker(const std::string& str, const uint16_t& len);
+        // /**
+        //  * @brief checks validity of string
+        //  * 
+        //  * @param str string
+        //  * @param len string length
+        //  * @return true 
+        //  * @return false 
+        //  */
+        // bool DigitChecker(const std::string& str, const uint16_t& len) noexcept;
 
         /**
          * @brief checks if everything is ok with brackets
@@ -303,7 +306,7 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool BracketParser(const std::string& str, const uint16_t& len);
+        bool BracketParser(const std::string& str, const uint16_t& len) noexcept;
 
         /**
          * @brief checks validity of string
@@ -313,7 +316,7 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool FnChecker(const std::string& str, const uint16_t& len);
+        bool FnChecker(const std::string& str, const uint16_t& len) noexcept;
        
         /**
          * @brief checks validity of string
@@ -322,7 +325,7 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool StringValidator(const std::string& str);
+        bool StringValidator(const std::string& str) noexcept;
 
         /**
          * @brief checks if everything is ok with dots
@@ -332,7 +335,7 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool TwoAndMorePointsChecker(const std::string& str,const  uint16_t& len);
+        bool TwoAndMorePointsChecker(const std::string& str,const  uint16_t& len ) noexcept;
 
         /**
          * @brief checks if everything is ok with oeprators
@@ -342,7 +345,7 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool OperatorChecker(const std::string& str, const uint16_t& len);
+        bool OperatorChecker(const std::string& str, const uint16_t& len) noexcept;
 
 
 //  ############################################################
@@ -365,10 +368,18 @@ class Model{
          */
         bool StrContainsX(const std::string& str);
 
-        
+
+        /**
+         * @brief checks if string literal could be converted to double
+         * 
+         * @param str string to be checked
+         * @return true 
+         * @return false 
+         */
+        bool IsDouble(const std::string& str) noexcept;
 
     public:
-        Model() {};
+        explicit Model() {};
         ~Model() {};
 
         /**
@@ -378,16 +389,7 @@ class Model{
          * @return true 
          * @return false 
          */
-        bool Errorchecker (const std::string& str);
-
-        /**
-         * @brief checks if string literal could be converted to double
-         * 
-         * @param str string to be checked
-         * @return true 
-         * @return false 
-         */
-        bool IsDouble(const std::string& str);
+        bool Errorchecker (const std::string& str) noexcept;
 
 
         /**
@@ -406,9 +408,8 @@ class Model{
                         if (i == 1) tmp.push_back("wrong XMax input");
                         if (i == 2) tmp.push_back("wrong Ymin input");
                         if (i == 3) tmp.push_back("wrong Ymax input");
-                    } else {
-                        edgesval[i] = std::stod(edges[i]);
-                    }
+                    } 
+                    else edgesval[i] = std::stod(edges[i]);
                 }
             }
             if (edgesval[0] >= edgesval[1]) tmp.push_back("Xmax should be > Xmin");

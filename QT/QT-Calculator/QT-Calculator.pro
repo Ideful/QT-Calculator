@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     ../../Model.cpp \
+    graphique.cpp \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp
@@ -17,10 +18,12 @@ SOURCES += \
 HEADERS += \
     ../../Controller.h \
     ../../Model.h \
+    graphique.h \
     mainwindow.h \
     qcustomplot.h
 
 FORMS += \
+    graphique.ui \
     mainwindow.ui
 
 # Default rules for deployment.

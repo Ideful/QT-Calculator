@@ -78,66 +78,65 @@ void Model::Unary_Sub(std::stack<double>& st, const double& a) {
     st.push(-a);
 }
 
-Model::Lexem Model::LongFnToLexem(std::string::iterator& iter, size_t& len) {
+void Model::LongFnToLexem(std::string::iterator& iter,Model::Lexem& lex, size_t& len) noexcept {
     switch (*iter) {
         case 'm':       // mod
             ++iter;
             if ( *iter == 'o') {
                 len = 3;
-                return {false, 'm',2,0.};
+                lex = {false, 'm',2,0.};
             }
             break;
         case 'c':       // cos
             if ( *(++iter) == 'o') {
                 len = 3;
-                return {false, 'c',2,0};
+                lex = {false, 'c',2,0};
             }
             break;
         case 's':       // sin s
         ++iter;
             if ( *iter == 'i' ) {
                 len = 3;
-                return {false, 's',4,0};
+                lex = {false, 's',4,0};
             } else {    // sqrt q   
                 len = 4;
-                return {false, 'q',4,0};
+                lex = {false, 'q',4,0};
             }    
             break;  
         case 't':       // tan t
             len = 3;
-            return {false, 't',4,0};
+            lex = {false, 't',4,0};
             break;
         case 'a':
             ++iter;
             if (*iter == 'c') {     // acos
                 len = 4; 
-                return {false, 'o',4,0};
+                lex = {false, 'o',4,0};
             }    
             else if (*iter == 's') {    // asin
                 len = 4;
-                return {false, 'i',4,0};
+                lex = {false, 'i',4,0};
             }    
             else if (*iter == 't') {    // atan
                 len = 4;
-                return {false, 'a',4,0};
+                lex = {false, 'a',4,0};
             }    
             break;
         case 'l':
             ++iter;
             if ( *iter == 'n') {                 // ln l
                 len = 2;
-                return {false, 'l',4,0};
+                lex = {false, 'l',4,0};
             } else {                                 // log g
                 len = 3;    
-                return {false, 'g',4,0};
+                lex = {false, 'g',4,0};
             }    
             break;  
     }
-    return {};
 }
 
 
-void Model::FnToLex(std::string::iterator& iter,Model::Lexem& lex, size_t& i) {   // add unary
+void Model::FnToLex(std::string::iterator& iter,Model::Lexem& lex, size_t& i) noexcept {   // add unary
     switch (*iter) {
         case '+':
             lex.operation_ = '+';
@@ -185,7 +184,7 @@ void Model::FnToLex(std::string::iterator& iter,Model::Lexem& lex, size_t& i) { 
             i = 1;
             break;
         default:
-            lex = LongFnToLexem(iter,i);
+            LongFnToLexem(iter, lex,i);
     }
     lex.type_ = false;
     lex.number_ = 0;
@@ -258,14 +257,14 @@ double Model::QueueToNumber(std::queue<Model::Lexem>& que) {
     return st.top();
 }
 
-void Model::UnaryChecker(const std::stack<Model::Lexem>& stack, const std::string::iterator& it, const bool& is_unary) {
+void Model::UnaryChecker(const std::stack<Model::Lexem>& st, const std::string::iterator& it, const bool& is_unary) {
     if (is_unary) {
         if (*it == '+') *it = '#';
         else *it = '~';
     } 
     else {
-        if (!stack.empty()) {
-            if (stack.top().operation_ == '(') {
+        if (!st.empty()) {
+            if (st.top().operation_ == '(') {
                 if (*it == '+') *it = '#';
                 else *it = '~';           
             }
@@ -273,7 +272,7 @@ void Model::UnaryChecker(const std::stack<Model::Lexem>& stack, const std::strin
     }
 }
 
-void Model::SkipSpace(std::string& str, std::string::iterator& str_it) {
+void Model::SkipSpace(std::string& str, std::string::iterator& str_it) noexcept {
     while(*str_it == ' ') str = str.erase(0,1);
     str_it = str.begin();
 }
@@ -290,12 +289,20 @@ void Model::MultInserter(std::string& str) {
     }
 }
 
+void Model::ClearStackAddtoQueue(std::stack<Model::Lexem>& st, std::queue<Model::Lexem>& que){
+    while(!st.empty()) {
+        que.push(st.top());
+        st.pop();
+    }
+}
+
 double Model::Calculator(std::string& str) {
     Lexem lex;
     std::string::iterator str_it = str.begin();
     std::queue<Lexem> que;
     std::stack<Lexem> st;
     bool unary_sign = true;
+
     MultInserter(str);
     while(str_it != str.end()) {
         SkipSpace(str,str_it);
@@ -315,27 +322,23 @@ double Model::Calculator(std::string& str) {
         str_it = str.begin();
         if (unary_sign) unary_sign = false;
     }
-    while (!st.empty()) {
-        lex = st.top();
-        que.push(lex);
-        st.pop();
-    }
-
-    return QueueToNumber(que);;
+    ClearStackAddtoQueue(st,que);
+    return QueueToNumber(que);
 }
 
-bool Model::StringValidator(const std::string& str) {
-    const std::string comparer = ".,0123456789+-*/^()sincotalgmdqrxe ";
+bool Model::StringValidator(const std::string& str) noexcept {
+    const std::string comparer = ".0123456789+-*/^()sincotalgmdqrxe ";
     for(const char& sym : str) {
         if (comparer.find(sym) == std::string::npos) return false;
     }
     return true;
 }
 
-bool Model::TwoAndMorePointsChecker(const std::string& str, const uint16_t& len) {
+bool Model::TwoAndMorePointsChecker(const std::string& str, const uint16_t& len) noexcept {
     for(uint16_t i = 0; i < len; i++) {
         if (str[i] == '.' || str[i] == ',') {
             if (i == len - 1 || i == 0) return false;
+            if (!isdigit(str[i+1]) && str[i+1] != 'x') return false;
             if (!isdigit(str[i-1])) return false;
             i++;
             while(i != len - 1 && isdigit(str[i])) i++;   
@@ -346,10 +349,10 @@ bool Model::TwoAndMorePointsChecker(const std::string& str, const uint16_t& len)
     return true;
 }
 
-bool Model::OperatorChecker(const std::string& str, const uint16_t& len) {
+bool Model::OperatorChecker(const std::string& str, const uint16_t& len) noexcept {
     std::string comparer = " (0123456789mctlsax";
     for(uint16_t i = 0; i < len; i++) {
-        if (str[i] == '+' || str[i] == '+' || str[i] == '*' || str[i] == '/' || str[i] == '^') {
+        if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^') {
             if (comparer.find(str[i+1]) == std::string::npos) return false;
         }
     }
@@ -357,30 +360,30 @@ bool Model::OperatorChecker(const std::string& str, const uint16_t& len) {
 }
 
 
-bool Model::BeginChecker(const std::string& str) {
+bool Model::BeginChecker(const std::string& str) noexcept {
     std::string begin_comparer = " (0123456789cstalx+-";
     if (begin_comparer.find(str[0]) == std::string::npos) return false;
     return true;
 }
 
-bool Model::EndChecker(const std::string& str, const uint16_t& len) {
+bool Model::EndChecker(const std::string& str, const uint16_t& len) noexcept {
     std::string end_comparer = " 0123456789)x";
     if (end_comparer.find(str[len-1]) == std::string::npos) return false;
     return true;
 }
 
-bool Model::DigitChecker(const std::string& str, const uint16_t& len) {
-    std::string comparer = "0123456789ctmsal+-*/^.,)";
-    for(uint16_t i = 0; i < len; i++) {
-        if (isdigit(str[i])) {
-            if (i == len - 1) return true;
-            if (comparer.find(str[i+1]) == std::string::npos) return false;
-        }
-    }
-    return true;
-}
+// bool Model::DigitChecker(const std::string& str, const uint16_t& len) {
+//     std::string comparer = "0123456789ctmsal+-*/^.,)";
+//     for(uint16_t i = 0; i < len; i++) {
+//         if (isdigit(str[i])) {
+//             if (i == len - 1) return true;
+//             if (comparer.find(str[i+1]) == std::string::npos) return false;
+//         }
+//     }
+//     return true;
+// }
 
-bool Model::BracketParser(const std::string& str, const uint16_t& len) {
+bool Model::BracketParser(const std::string& str, const uint16_t& len) noexcept {
     uint8_t open = 0;
     uint8_t close = 0;
     for (uint16_t i = 0; i < len; i++) {
@@ -401,7 +404,7 @@ bool Model::BracketParser(const std::string& str, const uint16_t& len) {
     return open == close? true : false;
 }
 
-bool Model::FnChecker(const std::string& str, const uint16_t& len) {
+bool Model::FnChecker(const std::string& str, const uint16_t& len) noexcept {
     for(uint16_t i = 0; i < len; i++) {
         switch (str[i]){
             case 'm':
@@ -428,9 +431,9 @@ bool Model::FnChecker(const std::string& str, const uint16_t& len) {
             case 'a':
                 if (str[++i] == 's') {
                     if (!(str[++i] == 'i' && str[++i] == 'n')) return false;
-                } else if (str[++i] == 'c') {
+                } else if (str[i] == 'c') {
                     if (!(str[++i] == 'o' && str[++i] == 's')) return false;
-                } if (str[++i] == 't') {
+                } else if (str[i] == 't') {
                     if (!(str[++i] == 'a' && str[++i] == 'n')) return false;
                 }
                 break;
@@ -439,7 +442,7 @@ bool Model::FnChecker(const std::string& str, const uint16_t& len) {
     return true;
 }
 
-bool Model::Errorchecker (const std::string& str) {
+bool Model::Errorchecker (const std::string& str) noexcept {
     uint16_t len = str.length();
     if (len > 255) return false;
     if (!StringValidator(str)) return false;
@@ -452,7 +455,7 @@ bool Model::Errorchecker (const std::string& str) {
     return true;
 }
 
-bool Model::IsDouble(const std::string& str) {
+bool Model::IsDouble(const std::string& str) noexcept {
     uint16_t len = str.length();
     uint8_t dotcounter = 0;
     if (!isdigit(str[0]) && str[0] != '+' && str[0] != '-') return false;

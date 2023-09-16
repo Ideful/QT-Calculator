@@ -6,7 +6,8 @@
 #include <QKeyEvent>
 #include <QVector>
 #include "qcustomplot.h"
-#include "../../Controller.h"
+#include "graphique.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,7 +31,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    Controller controller_;
-    int graphcounter = 0;
+//    Controller controller_;
+    graphique Graphique;
 };
 #endif // MAINWINDOW_H

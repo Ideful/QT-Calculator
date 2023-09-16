@@ -2,7 +2,7 @@
 
 class Controller{
     public:
-        Controller() {};
+        explicit Controller() noexcept {};
         ~Controller() {};
 
 /**

@@ -47,7 +47,7 @@ void MainWindow::on_calculate_clicked()
 {
     std::string str = ui->CalcString->text().toUtf8().data();
     std::string xval = ui->x_val->text().toUtf8().data();
-    std::pair<std::string,double> qwe = controller_.GetRes(str,xval);
+    std::pair<std::string,double> qwe = Graphique.controller_.GetRes(str,xval);
     if (qwe.first != "")  QMessageBox::warning(this,"error", QString::fromStdString(qwe.first));
     else {
         QString res = QString::number(qwe.second);
@@ -59,50 +59,29 @@ void MainWindow::on_calculate_clicked()
 void MainWindow::on_makegraph_clicked()
 {
      std::string str = ui->CalcString->text().toUtf8().data();
-     if (!controller_.CheckIfInputStringIsOk(str)) QMessageBox::warning(this,"error","wrong input");
+     if (!Graphique.controller_.CheckIfInputStringIsOk(str)) QMessageBox::warning(this,"error","wrong input");
      else {
          std::vector<std::string> edges;
          edges.push_back(ui->xminval->text().toUtf8().data());
          edges.push_back(ui->xmaxval->text().toUtf8().data());
          edges.push_back(ui->yminval->text().toUtf8().data());
          edges.push_back(ui->ymaxval->text().toUtf8().data());
-         
+
          std::vector<double> edgesval;
          edgesval.push_back(0);
          edgesval.push_back(5);
          edgesval.push_back(0);
          edgesval.push_back(5);
 
-        std::vector<std::string> validator = controller_.ValidateGraphEdges(edgesval,edges);
+        std::vector<std::string> validator = Graphique.controller_.ValidateGraphEdges(edgesval,edges);
         if (validator.size()) {
             for(size_t i = 0; i < validator.size(); i++) {
                 QMessageBox::warning(this,"error",QString::fromStdString(validator[i]));
             }
         }
         if (validator.size() == 0) {
-            ui->graphwidget->xAxis->setRange(edgesval[0],edgesval[1]);
-            ui->graphwidget->yAxis->setRange(edgesval[2],edgesval[3]);
-            if (ui->graphwidget->graph()) {
-                for(int i = 0; i < graphcounter; i++) {
-                    ui->graphwidget->graph(i)->data()->clear();
-                }
-                ui->graphwidget->replot();
-            }
-            std::vector<double> x;
-            std::vector<double> y;
-            double i = edgesval[0];
-            while (i <= edgesval[1]) {
-                if(!x.empty()) x.clear();
-                if(!y.empty()) y.clear();
-                controller_.MakeGraph(x,y,edgesval,str,i);
-                ui->graphwidget->addGraph();
-                graphcounter++;
-                ui->graphwidget->graph()->addData(
-                    QVector<double>(x.begin(), x.end()),
-                    QVector<double>(y.begin(), y.end())
-                );
-                ui->graphwidget->replot();
-            }
+            Graphique.make_graph(str,edgesval);
+            Graphique.show();
         }
     }
 }

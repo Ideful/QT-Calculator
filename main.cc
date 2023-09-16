@@ -1,6 +1,6 @@
-// #include "Controller.h"
-// #include <iostream>
-// #include <stack>
+#include "Controller.h"
+#include <iostream>
+#include <stack>
 
 // bool StrContainsX(const std::string& str) {
 //     return (str.find('x') == std::string::npos) ? false : true;
@@ -24,15 +24,15 @@
 // //     }
 // // };
 
-// int main() {
+int main() {
 
-//     Controller qwe;
-//     // std::cout<<qwe.GetRes("2x","3").second;
-//     // std::string asd = "1e-3 + 0.1 + 0.1";
-//     // std::cout<<qwe.GetRes(asd,"").second;
-//     // std::cout<<qwe.CheckIfInputStringIsOk(asd);
+    Controller qwe;
+    // std::cout<<qwe.GetRes("2x","3").second;
+    // std::string asd = "1e-3 + 0.1 + 0.1";
+    // std::cout<<qwe.GetRes(asd,"").second;
+    // std::cout<<qwe.CheckIfInputStringIsOk(asd);
 
-//     Solution asd;
-//     std::string z = "((";
-//     std::cout<<asd.isValid("");
-// }
+    // Solution asd;
+    std::string z = "((";
+    // std::cout<<asd.isValid("");
+}
