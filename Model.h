@@ -8,6 +8,10 @@
 
 class Model{
     private:
+        /**
+         * @brief simple semiclass for string parsing
+         * 
+         */
         struct Lexem {
             Lexem():type_(0),operation_(0),priority_(0),number_(0) {};
             Lexem(bool type, char operation, int16_t priority, double number) : type_(type), operation_(operation), priority_(priority),number_(number) {};
@@ -24,6 +28,7 @@ class Model{
          * @param st stack
          * @param a value 1
          * @param b value 2
+         * @private
          */
         static void Sum(std::stack<double>& st, const double& a, const double& b);
 
@@ -33,6 +38,7 @@ class Model{
          * @param st stack
          * @param a value 1
          * @param b value 2
+         * @private
          */
         static void Mult(std::stack<double>& st, const double& a, const double& b);
 
@@ -42,6 +48,7 @@ class Model{
          * @param st - stack
          * @param a  - value 1
          * @param b  - value 2
+         * @private
          */
 
         static void Div(std::stack<double>& st, const double& a, const double& b);
@@ -52,6 +59,7 @@ class Model{
          * @param st stack
          * @param a value 1
          * @param b value 2
+         * @private
          */
         static void Sub(std::stack<double>& st, const double& a, const double& b);
 
@@ -61,6 +69,7 @@ class Model{
          * @param st stack
          * @param a value 1
          * @param b value 2
+         * @private
          */
         static void Mod(std::stack<double>& st, const double& a, const double& b);
 
@@ -70,6 +79,7 @@ class Model{
          * @param st stack
          * @param a value 1
          * @param b value 2
+         * @private
          */
         static void Pow(std::stack<double>& st, const double& a, const double& b);
 
@@ -78,6 +88,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Sin(std::stack<double>& st, const double& a);
 
@@ -86,6 +97,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Cos(std::stack<double>& st, const double& a);
 
@@ -94,6 +106,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Tan(std::stack<double>& st, const double& a);
 
@@ -102,6 +115,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Asin(std::stack<double>& st, const double& a);
 
@@ -110,6 +124,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Acos(std::stack<double>& st, const double& a);
 
@@ -118,6 +133,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Atan(std::stack<double>& st, const double& a);
 
@@ -126,6 +142,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Sqrt(std::stack<double>& st, const double& a);
 
@@ -134,6 +151,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Ln(std::stack<double>& st, const double& a);
 
@@ -142,6 +160,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Log(std::stack<double>& st, const double& a);
 
@@ -150,6 +169,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Unary_Sum(std::stack<double>& st, const double& a);
 
@@ -158,6 +178,7 @@ class Model{
          * 
          * @param st stack
          * @param a value
+         * @private
          */
         static void Unary_Sub(std::stack<double>& st, const double& a);
 
@@ -168,6 +189,7 @@ class Model{
          * 
          * @param stack stack
          * @param fn funciton pointer
+         * @private
          */
         void UnaryCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, const double& a));
 
@@ -176,6 +198,7 @@ class Model{
          * 
          * @param stack stack
          * @param fn funciton pointer
+         * @private
          */
         void BinCalculator(std::stack<double>& stack, void (*fn)(std::stack<double>& st, const double& a, const double& b));
 
@@ -185,6 +208,7 @@ class Model{
          * @param iter string iterator
          * @param lex lexem to be filled
          * @param len current position in string
+         * @private
          */
         void LongFnToLexem(std::string::iterator& iter,Model::Lexem& lex, size_t& len) noexcept;
 
@@ -194,6 +218,7 @@ class Model{
          * @param iter string iterator
          * @param lex lexem to be filled
          * @param i amount of string symbols which represents one lexem
+         * @private
          */
         void FnToLex(std::string::iterator& iter,Lexem& lex, size_t& i) noexcept;
 
@@ -203,6 +228,7 @@ class Model{
          * @param lex lexem
          * @return true 
          * @return false 
+         * @private
          */
         bool CheckIfFn(const Lexem& lex);
 
@@ -212,6 +238,7 @@ class Model{
          * @param stack stack we have
          * @param lex lexem we processing
          * @param que queue we have
+         * @private
          */
         void LexProcessor(std::stack<Lexem>& stack, Lexem& lex, std::queue<Lexem>& que);
 
@@ -220,6 +247,7 @@ class Model{
          * 
          * @param que queue
          * @param st stack
+         * @private
          */
         void CalculateQueue(std::queue<Lexem>& que, std::stack<double>& st);
 
@@ -228,6 +256,7 @@ class Model{
          * 
          * @param que queue
          * @return double  
+         * @private
          */
         double QueueToNumber(std::queue<Lexem>& que);
 
@@ -237,6 +266,7 @@ class Model{
          * @param stack stack
          * @param it iterator
          * @param is_unary bool flague
+         * @private
          */
         void UnaryChecker(const std::stack<Lexem>& stack, const std::string::iterator& it, const bool& is_unary);
 
@@ -245,6 +275,7 @@ class Model{
          * 
          * @param str string
          * @param str_it iterator
+         * @private
          */
         void SkipSpace(std::string& str, std::string::iterator& str_it) noexcept;
 
@@ -252,6 +283,7 @@ class Model{
          * @brief inserts "*" in a string if required
          * 
          * @param str string
+         * @private
          */
         void MultInserter(std::string& str);
 
@@ -262,6 +294,7 @@ class Model{
          * 
          * @param str string to be calculated
          * @return double 
+         * @private
          */
         double Calculator(std::string& str);
 
@@ -275,6 +308,7 @@ class Model{
          * @param str string
          * @return true 
          * @return false 
+         * @private
          */
         bool BeginChecker(const std::string& str) noexcept;
 
@@ -284,19 +318,11 @@ class Model{
          * @param str string
          * @param len string length
          * @return true 
-         * @return false 
+         * @return false
+         * @private 
          */
         bool EndChecker(const std::string& str, const uint16_t& len) noexcept;
 
-        // /**
-        //  * @brief checks validity of string
-        //  * 
-        //  * @param str string
-        //  * @param len string length
-        //  * @return true 
-        //  * @return false 
-        //  */
-        // bool DigitChecker(const std::string& str, const uint16_t& len) noexcept;
 
         /**
          * @brief checks if everything is ok with brackets
@@ -305,6 +331,7 @@ class Model{
          * @param len  string length
          * @return true 
          * @return false 
+         * @private
          */
         bool BracketParser(const std::string& str, const uint16_t& len) noexcept;
 
@@ -315,6 +342,7 @@ class Model{
          * @param len string length
          * @return true 
          * @return false 
+         * @private
          */
         bool FnChecker(const std::string& str, const uint16_t& len) noexcept;
        
@@ -324,6 +352,7 @@ class Model{
          * @param str string
          * @return true 
          * @return false 
+         * @private
          */
         bool StringValidator(const std::string& str) noexcept;
 
@@ -334,6 +363,7 @@ class Model{
          * @param len string length
          * @return true 
          * @return false 
+         * @private
          */
         bool TwoAndMorePointsChecker(const std::string& str,const  uint16_t& len ) noexcept;
 
@@ -344,6 +374,7 @@ class Model{
          * @param len string length
          * @return true 
          * @return false 
+         * @private
          */
         bool OperatorChecker(const std::string& str, const uint16_t& len) noexcept;
 
@@ -356,6 +387,7 @@ class Model{
          * @param str string
          * @param xval x value
          * @return std::string 
+         * @private
          */
         std::string InsertXVal(std::string str,const double& xval);
 
@@ -365,6 +397,7 @@ class Model{
          * @param str string
          * @return true 
          * @return false 
+         * @private
          */
         bool StrContainsX(const std::string& str);
 
@@ -375,6 +408,7 @@ class Model{
          * @param str string to be checked
          * @return true 
          * @return false 
+         * @private
          */
         bool IsDouble(const std::string& str) noexcept;
 

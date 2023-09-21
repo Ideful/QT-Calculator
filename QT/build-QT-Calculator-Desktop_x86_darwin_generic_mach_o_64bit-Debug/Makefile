@@ -52,7 +52,7 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../../Model.cpp \
+SOURCES       = ../../Model.cc \
 		../QT-Calculator/graphique.cpp \
 		../QT-Calculator/main.cpp \
 		../QT-Calculator/mainwindow.cpp \
@@ -326,7 +326,7 @@ DIST          = /usr/local/share/qt/mkspecs/features/spec_pre.prf \
 		../../Model.h \
 		../QT-Calculator/graphique.h \
 		../QT-Calculator/mainwindow.h \
-		../QT-Calculator/qcustomplot.h ../../Model.cpp \
+		../QT-Calculator/qcustomplot.h ../../Model.cc \
 		../QT-Calculator/graphique.cpp \
 		../QT-Calculator/main.cpp \
 		../QT-Calculator/mainwindow.cpp \
@@ -905,7 +905,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/local/share/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Controller.h ../../Model.h ../QT-Calculator/graphique.h ../QT-Calculator/mainwindow.h ../QT-Calculator/qcustomplot.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../Model.cpp ../QT-Calculator/graphique.cpp ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.cpp ../QT-Calculator/qcustomplot.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Model.cc ../QT-Calculator/graphique.cpp ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.cpp ../QT-Calculator/qcustomplot.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../QT-Calculator/graphique.ui ../QT-Calculator/mainwindow.ui $(DISTDIR)/
 
 
@@ -954,17 +954,6 @@ moc_graphique.cpp: ../QT-Calculator/graphique.h \
 moc_mainwindow.cpp: ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/usr/local/lib/QtWidgets.framework/Headers/QWidget \
-		/usr/local/lib/QtWidgets.framework/Headers/qwidget.h \
-		/usr/local/lib/QtGui.framework/Headers/QKeyEvent \
-		/usr/local/lib/QtGui.framework/Headers/qevent.h \
-		/usr/local/lib/QtCore.framework/Headers/QVector \
-		/usr/local/lib/QtCore.framework/Headers/qvector.h \
-		../QT-Calculator/qcustomplot.h \
-		/usr/local/lib/QtCore.framework/Headers/qmath.h \
-		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
-		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
-		../QT-Calculator/graphique.h \
 		moc_predefs.h \
 		/usr/local/share/qt/libexec/moc
 	/usr/local/share/qt/libexec/moc $(DEFINES) --include /Users/mirianfu/21/git/QT-Calculator/QT/build-QT-Calculator-Desktop_x86_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/usr/local/share/qt/mkspecs/macx-clang -I/Users/mirianfu/21/git/QT-Calculator/QT/QT-Calculator -I/usr/local/lib/QtWidgets.framework/Headers -I/usr/local/lib/QtGui.framework/Headers -I/usr/local/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/usr/local/lib ../QT-Calculator/mainwindow.h -o moc_mainwindow.cpp
@@ -985,19 +974,11 @@ compiler_uic_make_all: ui_graphique.h ui_mainwindow.h
 compiler_uic_clean:
 	-$(DEL_FILE) ui_graphique.h ui_mainwindow.h
 ui_graphique.h: ../QT-Calculator/graphique.ui \
-		/usr/local/share/qt/libexec/uic \
-		../QT-Calculator/qcustomplot.h \
-		/usr/local/lib/QtCore.framework/Headers/qmath.h \
-		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
-		/usr/local/lib/QtCore.framework/Headers/QtNumeric
+		/usr/local/share/qt/libexec/uic
 	/usr/local/share/qt/libexec/uic ../QT-Calculator/graphique.ui -o ui_graphique.h
 
 ui_mainwindow.h: ../QT-Calculator/mainwindow.ui \
-		/usr/local/share/qt/libexec/uic \
-		../QT-Calculator/qcustomplot.h \
-		/usr/local/lib/QtCore.framework/Headers/qmath.h \
-		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
-		/usr/local/lib/QtCore.framework/Headers/QtNumeric
+		/usr/local/share/qt/libexec/uic
 	/usr/local/share/qt/libexec/uic ../QT-Calculator/mainwindow.ui -o ui_mainwindow.h
 
 compiler_rez_source_make_all:
@@ -1012,31 +993,18 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-Model.o: ../../Model.cpp ../../Model.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Model.o ../../Model.cpp
+Model.o: ../../Model.cc ../../Model.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Model.o ../../Model.cc
 
 graphique.o: ../QT-Calculator/graphique.cpp ../QT-Calculator/graphique.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../../Controller.h \
-		../../Model.h \
 		ui_graphique.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o graphique.o ../QT-Calculator/graphique.cpp
 
 main.o: ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/usr/local/lib/QtWidgets.framework/Headers/QWidget \
-		/usr/local/lib/QtWidgets.framework/Headers/qwidget.h \
-		/usr/local/lib/QtGui.framework/Headers/QKeyEvent \
-		/usr/local/lib/QtGui.framework/Headers/qevent.h \
-		/usr/local/lib/QtCore.framework/Headers/QVector \
-		/usr/local/lib/QtCore.framework/Headers/qvector.h \
-		../QT-Calculator/qcustomplot.h \
-		/usr/local/lib/QtCore.framework/Headers/qmath.h \
-		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
-		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
-		../QT-Calculator/graphique.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QApplication \
 		/usr/local/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../QT-Calculator/main.cpp
@@ -1044,20 +1012,7 @@ main.o: ../QT-Calculator/main.cpp ../QT-Calculator/mainwindow.h \
 mainwindow.o: ../QT-Calculator/mainwindow.cpp ../QT-Calculator/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/usr/local/lib/QtWidgets.framework/Headers/QWidget \
-		/usr/local/lib/QtWidgets.framework/Headers/qwidget.h \
-		/usr/local/lib/QtGui.framework/Headers/QKeyEvent \
-		/usr/local/lib/QtGui.framework/Headers/qevent.h \
-		/usr/local/lib/QtCore.framework/Headers/QVector \
-		/usr/local/lib/QtCore.framework/Headers/qvector.h \
-		../QT-Calculator/qcustomplot.h \
-		/usr/local/lib/QtCore.framework/Headers/qmath.h \
-		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
-		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
-		../QT-Calculator/graphique.h \
-		ui_mainwindow.h \
-		/usr/local/lib/QtWidgets.framework/Headers/QMessageBox \
-		/usr/local/lib/QtWidgets.framework/Headers/qmessagebox.h
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../QT-Calculator/mainwindow.cpp
 
 qcustomplot.o: ../QT-Calculator/qcustomplot.cpp ../QT-Calculator/qcustomplot.h \

@@ -1,5 +1,40 @@
 #include "Model.h"
 
+/*!
+ * \mainpage C++ QT SmartCalc.
+ *
+ * Extended Calculator with graph creating possibility. Please use 'escape' button to make graph and 'enter' button to calculate expression.
+ *
+ * Operators to work with:
+ * - Brackets
+ * - Sum
+ * - Sub
+ * - Div
+ * - Mult
+ * - Mod
+ * - Scale
+ * - Unary sub
+ * - Unary sum
+ *
+ * And functions:
+ *
+ * - sin
+ * - cos
+ * - tan
+ * - asin
+ * - acos
+ * - atan
+ * - sqrt
+ * - Log(10)
+ * - Log(e)
+ * \section Installation
+ *
+ * To install please use <b>make install</b> in terminal. it would be installed on your desktop
+ *
+ * To remove please <b>make uninstall</b>
+ */
+
+
 class Controller{
     public:
         explicit Controller() noexcept {};
